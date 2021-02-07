@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Longiara - Inicio</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/theme/theme-blue-light.css">
+    <link rel="stylesheet" type="text/css" href="assets/layout/css/layout-blue-light.css">
+    <link rel="stylesheet" type="text/css" href="assets/pages/grid.css">
+</head>
+
+    <body class="login-body">
+        <div class="body-container">
+          <div class="my-auto">
+            <div class="login-wrapper card">
+              <p-messages [value]="msgs" class="col-6 align-self-center"  [closable]="true" [showTransitionOptions]="'10ms'" [hideTransitionOptions]="'0ms'"></p-messages>
+                <div class="login-container">
+                  <img src="assets/layout/images/avatar-login.png" alt="Italian Trulli">
+                  <h1>Longiara</h1>
+                    <div class="ui-g ui-fluid">
+                      <div class="ui-g-12">
+                        <div class="ui-inputgroup">
+                            <span class="ui-inputgroup-addon blue-btn"><i class="fa fa-user" style="line-height: 1.25;"></i></span>
+                            <input [(ngModel)]="usuario.username" type="text" pInputText placeholder="Usuario">
+                        </div>
+                      </div>
+                      <div class="ui-g-12">
+                        <div class="ui-inputgroup">
+                            <span class="ui-inputgroup-addon blue-btn"><i class="fa fa-lock" style="line-height: 1.25;"></i></span>
+                            <input [(ngModel)]="usuario.password" type="password" pInputText placeholder="Contraseña" (keydown.enter)="login()">
+                        </div>
+                      </div>
+                      <div class="ui-g-12">
+                        <button (click)='login()' type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only blue-btn">
+                          <span class="ui-button-text ui-c">
+                            <img src="assets/layout/images/check.svg" alt="login" style="height: 13px;width: 16px;float: left;margin-top: 3px">
+                            Iniciar Sesión
+                          </span>
+                        </button>
+                      </div>
+                      <div class="ui-g-12 align-self-center">
+                          <a href="#">Olvido la contraseña?</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </body>
+
+</html>
