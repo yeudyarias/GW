@@ -40,5 +40,5 @@ export const routes: Routes = [
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes,
-  {onSameUrlNavigation: 'reload'},
+  { onSameUrlNavigation: 'reload', relativeLinkResolution: 'legacy' },
 );
