@@ -39,6 +39,6 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes,
-  { onSameUrlNavigation: 'reload', relativeLinkResolution: 'legacy' },
+export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes,
+  {onSameUrlNavigation: 'reload'},
 );
