@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
       this.authService.guardarUsuario(response.access_token);
       this.authService.guardarToken(response.access_token);
       let usuario = this.authService.usuario;
-      this.router.navigate(['/lista-usuario-clinico']);
+      this.router.navigate(['/lista-pacientes']);
       this.msgs = [];
       this.msgs.push({severity:'succes', summary:'Login', detail:`Hola ${usuario.username}, has iniciado sesión con éxito!`});
     }, err => {

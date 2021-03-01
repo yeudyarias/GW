@@ -18,6 +18,7 @@ import { CRUDClientesComponent } from './usuario-clinico/crud-usuario-clinico.co
 import { LoginComponent } from './usuarios/login.component';
 import { AuthGuard } from './usuarios/guards/auth.guard';
 import { RoleGuard } from './usuarios/guards/role.guard';
+import { PaisComponent } from './mantenimiento/pais/pais.component';
 
 export const routes: Routes = [
     { path: '', component: DashboardDemoComponent },
@@ -36,7 +37,8 @@ export const routes: Routes = [
     { path: 'lista-pacientes', component: ClientesComponent },
     { path: 'administrar-pacientes', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
     { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
-    { path: 'login', component: LoginComponent }
+    { path: 'login', component: LoginComponent },
+    { path: 'paises', component: PaisComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes,

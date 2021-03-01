@@ -31,7 +31,7 @@ msgs: Message[] = [];
     this.msgs = [];
     this.msgs.push({severity:'warning', summary:'Acceso denegado', detail:`Hola ${this.authService.usuario.username} no tienes acceso a este recurso!`});
 
-    this.router.navigate(['/lista-usuario-clinico']);
+    this.router.navigate(['/lista-pacientes']);
     return false;
   }
 }

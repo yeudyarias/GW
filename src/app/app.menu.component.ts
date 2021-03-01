@@ -26,6 +26,12 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Mantenimiento', icon: 'fa fa-fw 	fa fa-cog', routerLink: ['/components'],
+                items: [
+                    { label: 'Paises', icon: 'fa fa-fw fa-flag', routerLink: ['/paises'] },                    
+                ]
+            },
+            {
                 label: 'Administracion', icon: 'fa fa-fw fa-sitemap', routerLink: ['/components'],
                 items: [
                     { label: 'Sample Page', icon: 'fa fa-fw fa-columns', routerLink: ['/components/sample'] },

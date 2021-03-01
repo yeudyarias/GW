@@ -118,6 +118,9 @@ import { NodeService } from './demo/service/nodeservice';
 import { BreadcrumbService } from './breadcrumb.service';
 import {MenuService} from './app.menu.service';
 import { ConfirmationService } from 'primeng/api';
+import { PaisComponent } from './mantenimiento/pais/pais.component';
+import { MarcaComponent } from './mantenimiento/marca/marca.component';
+import { PaisService } from './mantenimiento/pais/pais.service';
 
 registerLocaleData(localeES, 'es');
 
@@ -222,11 +225,13 @@ registerLocaleData(localeES, 'es');
         ClientesComponent,
         CRUDClientesComponent,
         LoginComponent,
-        FacturasComponent
+        FacturasComponent,        
+        PaisComponent,
+        MarcaComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        CarService, CountryService, EventService, NodeService, BreadcrumbService, MenuService, ClienteService,ConfirmationService,
+        CarService, CountryService, EventService, NodeService, BreadcrumbService, MenuService, ClienteService,ConfirmationService,PaisService,
         { provide: LOCALE_ID, useValue: 'es' },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],

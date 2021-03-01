@@ -1,0 +1,53 @@
+<div class="card border-primary mb-3">
+    <p-messages [value]="msgs" [closable]="true" [showTransitionOptions]="'10ms'" [hideTransitionOptions]="'0ms'">
+    </p-messages>
+
+    <p-fieldset legend="Informacion Pais">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <span>Nombre:</span>
+                <input type="text" maxlength="40" [(ngModel)]="selectedPais.nombre" name="nombre" #nombre="ngModel"
+                    placeholder="Nombre" pInputText>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <span>Descripcion:</span>
+                <input type="text" [(ngModel)]="selectedPais.descripcion" name="descripcio" #parentesco="ngModel"
+                    placeholder="Descripcion" pInputText>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <button type="button" pButton icon="pi pi-save" (click)="guardarPais()" style="margin-top: 7%;"
+                    label="Guardar"></button>
+            </div>
+        </div>
+    </p-fieldset>
+    <br />
+    <p-table #dt [columns]="cols" [value]="paises" selectionMode="single" dataKey="idPais"
+        (onRowSelect)="onRowSelect($event)" [(selection)]="selectedPais" [responsive]="true" [paginator]="true"
+        [lazy]="true" (onLazyLoad)="loadCarsLazyT($event)" [rows]="10" [totalRecords]="totalRecords">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input *ngSwitchCase="'idPais'" pInputText type="text"
+                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input *ngSwitchCase="'nombre'" pInputText type="text"
+                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input *ngSwitchCase="'descripcion'" pInputText type="text"
+                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td>{{rowData.idPais}}</td>
+                <td>{{rowData.nombre}}</td>
+                <td>{{rowData.descripcion}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
