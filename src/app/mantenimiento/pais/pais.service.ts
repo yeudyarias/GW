@@ -15,7 +15,7 @@ export class PaisService {
   constructor(private http: HttpClient, private router: Router) { }
 
 
-  getUsuariosClinico(page: number): Observable<any> {
+  getPaises(page: number): Observable<any> {
     return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
       tap((response: any) => {
         console.log('PaisService: tap 1');
@@ -49,7 +49,7 @@ export class PaisService {
   create(Pais: Pais): Observable<Pais> {
     return this.http.post(this.urlEndPoint, Pais)
       .pipe(
-        map((response: any) => response.Pais as Pais),
+        map((response: Pais) => Pais as Pais),
         catchError(e => {
           if (e.status == 400) {
             return throwError(e);
@@ -63,6 +63,7 @@ export class PaisService {
 
   update(Pais: Pais): Observable<any> {
     return this.http.put<any>(`${this.urlEndPoint}/${Pais.idPais}`, Pais).pipe(
+      map((response: Pais) => Pais as Pais),
       catchError(e => {
         if (e.status == 400) {
           return throwError(e);
@@ -83,4 +84,5 @@ export class PaisService {
         return throwError(e);
       }));
   }
+  
 }
