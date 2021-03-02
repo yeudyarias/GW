@@ -121,6 +121,7 @@ import { ConfirmationService } from 'primeng/api';
 import { PaisComponent } from './mantenimiento/pais/pais.component';
 import { MarcaComponent } from './mantenimiento/marca/marca.component';
 import { PaisService } from './mantenimiento/pais/pais.service';
+import { MarcaService } from './mantenimiento/marca/marca.service';
 
 registerLocaleData(localeES, 'es');
 
@@ -231,7 +232,7 @@ registerLocaleData(localeES, 'es');
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        CarService, CountryService, EventService, NodeService, BreadcrumbService, MenuService, ClienteService,ConfirmationService,PaisService,
+        CarService, CountryService, EventService, NodeService, BreadcrumbService, MenuService, ClienteService,ConfirmationService,PaisService,MarcaService,
         { provide: LOCALE_ID, useValue: 'es' },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
