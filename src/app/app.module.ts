@@ -122,6 +122,8 @@ import { PaisComponent } from './mantenimiento/pais/pais.component';
 import { MarcaComponent } from './mantenimiento/marca/marca.component';
 import { PaisService } from './mantenimiento/pais/pais.service';
 import { MarcaService } from './mantenimiento/marca/marca.service';
+import { CargoComponent } from './mantenimiento/cargo/cargo.component';
+import { CargoService } from './mantenimiento/cargo/cargo.service';
 
 registerLocaleData(localeES, 'es');
 
@@ -228,11 +230,14 @@ registerLocaleData(localeES, 'es');
         LoginComponent,
         FacturasComponent,        
         PaisComponent,
-        MarcaComponent
+        MarcaComponent,
+        CargoComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        CarService, CountryService, EventService, NodeService, BreadcrumbService, MenuService, ClienteService,ConfirmationService,PaisService,MarcaService,
+        CarService, CountryService, EventService, NodeService, BreadcrumbService,
+         MenuService, ClienteService,ConfirmationService,PaisService,MarcaService,
+         CargoService,
         { provide: LOCALE_ID, useValue: 'es' },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],

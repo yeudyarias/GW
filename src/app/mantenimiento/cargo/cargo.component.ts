@@ -2,26 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
 import { tap } from 'rxjs/operators';
-import { Marca } from 'src/app/models/marca';
+import { Cargo } from 'src/app/models/cargo';
 import { Message } from 'primeng/primeng';
 import { ModalService } from 'src/app/usuario-clinico/detalle/modal.service';
 import { BreadcrumbService } from 'src/app/breadcrumb.service';
-import { MarcaService } from './marca.service';
+import { CargoService } from './cargo.service';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
-  selector: 'app-marca',
-  templateUrl: './marca.component.html',
-  styleUrls: ['./marca.component.css']
+  selector: 'app-cargo',
+  templateUrl: './cargo.component.html'
 })
-export class MarcaComponent implements OnInit {
+export class CargoComponent implements OnInit {
 
-  marcas: Marca[];
-  pp: Marca[];
-  marcaModel: Marca = new Marca();
-  marca: Marca = new Marca();  
+  cargos: Cargo[];
+  pp: Cargo[];
+  cargoModel: Cargo = new Cargo();
+  cargo: Cargo = new Cargo();  
   cols: any[];
-  selectedMarca: Marca;
+  selectedCargo: Cargo;
   paginador: any;
   displayDialog: boolean;
   nuevoCliente: boolean;
@@ -31,52 +30,52 @@ export class MarcaComponent implements OnInit {
   errores: string[];
 
 
-  constructor(private marcaService: MarcaService,
+  constructor(private cargoService: CargoService,
     private router: Router,
     private confirmationService: ConfirmationService,
     private modalService: ModalService,
     private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([
-      { label: 'Marcas', routerLink: ['/marcas'] }
+      { label: 'Cargo', routerLink: ['/cargos'] }
     ]);
   }
 
   ngOnInit() {
     this.cols = [
-      { field: 'idMarca', header: 'Id' },
+      { field: 'idCargo', header: 'Id' },
       { field: 'nombre', header: 'Nombre' },
       { field: 'descripcion', header: 'Descripcion' }
     ];
 
-    this.getMarcas(0);
-    this.selectedMarca = new Marca();
+    this.getCargos(0);
+    this.selectedCargo = new Cargo();
 
-    this.modalService.notificarUpload.subscribe(marca => {
-      this.marcas = this.marcas.map(marcaOriginal => {
-        return marcaOriginal;
+    this.modalService.notificarUpload.subscribe(cargo => {
+      this.cargos = this.cargos.map(cargoOriginal => {
+        return cargoOriginal;
       })
     })
   }
 
-  private getMarcas(page: number) {
-    this.marcaService.getMarcas(page)
+  private getCargos(page: number) {
+    this.cargoService.getCargos(page)
       .pipe(
         tap(response => {
-          console.log('MarcasComponent: tap 3');
-          (response.content as Marca[]).forEach(cliente => console.log(cliente.nombre));
+          console.log('CargosComponent: tap 3');
+          (response.content as Cargo[]).forEach(cliente => console.log(cliente.nombre));
         })
       ).subscribe(response => {
-        this.marcas = response.content as Marca[];
+        this.cargos = response.content as Cargo[];
         this.paginador = response;
         this.totalRecords = this.paginador.totalPages * 10;
       });
   }
 
-  validarMarcas(): any {
+  validarCargos(): any {
     var result = false;
-    this.marcas.forEach(p => {
-      if (p.nombre != null && this.selectedMarca.nombre && p.nombre.toUpperCase() == this.selectedMarca.nombre.toUpperCase()) {
-          if (this.selectedMarca.idMarca != null && this.selectedMarca.idMarca != p.idMarca) {
+    this.cargos.forEach(p => {
+      if (p.nombre != null && this.selectedCargo.nombre && p.nombre.toUpperCase() == this.selectedCargo.nombre.toUpperCase()) {
+          if (this.selectedCargo.idCargo != null && this.selectedCargo.idCargo != p.idCargo) {
             result = true;
           } else {
             result = true;
@@ -87,29 +86,29 @@ export class MarcaComponent implements OnInit {
   }
 
 
-  guardarMarca(table): void {
+  guardarCargo(table): void {
     this.msgs = [];
-    if (this.validarMarcas()) {
-      this.msgs.push({ severity: 'error', summary: 'Marca Duplicada', detail: 'Marca '+this.selectedMarca.nombre+' ya existe' });
+    if (this.validarCargos()) {
+      this.msgs.push({ severity: 'error', summary: 'Cargo Duplicado', detail: 'Cargo '+this.selectedCargo.nombre+' ya existe' });
       return;
     }
-    if (this.selectedMarca.idMarca != null) {
-      this.updateMarca();
+    if (this.selectedCargo.idCargo != null) {
+      this.updateCargo();
     } else {
-      this.createMarca();
+      this.createCargo();
     }
-    this.selectedMarca = new Marca();
-    this.getMarcas(0);
+    this.selectedCargo = new Cargo();
+    this.getCargos(0);
     this.limpiar();
     table.reset();
   }
-  createMarca(): void {
-    console.log(this.selectedMarca);
-    this.marcaService.create(this.selectedMarca)
+  createCargo(): void {
+    console.log(this.selectedCargo);
+    this.cargoService.create(this.selectedCargo)
       .subscribe(
-        marca => {
-          this.msgs.push({ severity: 'success', summary: 'Nueva Marca', detail: `La marca ${marca.nombre} ha sido creada con éxito` });
-          this.selectedMarca = new Marca();
+        cargo => {
+          this.msgs.push({ severity: 'success', summary: 'Nuevo Cargo', detail: `El Cargo ${cargo.nombre} ha sido creado con éxito` });
+          this.selectedCargo = new Cargo();
         },
         err => {
           this.errores = err.error.errors as string[];
@@ -125,14 +124,14 @@ export class MarcaComponent implements OnInit {
       );
   }
 
-  updateMarca(): void {
-    console.log(this.selectedMarca);
+  updateCargo(): void {
+    console.log(this.selectedCargo);
     this.msgs = [];
-    this.marcaService.update(this.selectedMarca)
+    this.cargoService.update(this.selectedCargo)
       .subscribe(
         json => {
-          this.msgs.push({ severity: 'success', summary: 'Marca Actualizada', detail: `La marca ${json.nombre} ha sido actualizada con éxito`  });
-          this.selectedMarca = new Marca();
+          this.msgs.push({ severity: 'success', summary: 'Cargo Actualizado', detail: `El Cargo ${json.nombre} ha sido actualizado con éxito`  });
+          this.selectedCargo = new Cargo();
         },
         err => {
           this.errores = err.error.errors as string[];
@@ -152,7 +151,7 @@ export class MarcaComponent implements OnInit {
   loadCarsLazyT(event: LazyLoadEvent) {
     this.loading = true;
     setTimeout(() => {
-      this.getMarcas(event.first / 10);
+      this.getCargos(event.first / 10);
       this.loading = false;
 
     }, 500);
@@ -162,14 +161,14 @@ export class MarcaComponent implements OnInit {
 
   }
 
-  selectMarca(c: Marca): void {
-    this.selectedMarca = {...c};    
+  selectCargo(c: Cargo): void {
+    this.selectedCargo = {...c};    
   }
 
   limpiar(): void {
     this.msgs = [];
-    this.marcaModel = new Marca
-    console.log(this.marcaModel);
+    this.cargoModel = new Cargo
+    console.log(this.cargoModel);
   }
 
   getErrores(): void {
@@ -181,29 +180,28 @@ export class MarcaComponent implements OnInit {
     }
   }
 
-  confirmBorrar(c: Marca): void {
+  confirmBorrar(c: Cargo): void {
     this.confirmationService.confirm({
-      message: 'Desea eliminar a ' + c.nombre + ' como marca?',
+      message: 'Desea eliminar a ' + c.nombre + ' como cargo?',
       header: 'Confirmación Eliminar',
       acceptLabel: 'Si',
       rejectLabel: 'No',
       icon: 'pi pi-info-circle',
       accept: () => {
 
-        this.marcaService.delete(c.idMarca).subscribe(
+        this.cargoService.delete(c.idCargo).subscribe(
           () => {
-            this.marcas = this.marcas.filter(cli => cli !== c)
-            this.msgs = [{ severity: 'success', summary: 'Marca Eliminada', detail: 'Marca ' + c.nombre + ' eliminada con éxito!' }];
-            this.getMarcas(0);
+            this.cargos = this.cargos.filter(cli => cli !== c)
+            this.msgs = [{ severity: 'success', summary: 'Cargo Eliminado', detail: 'Cargo ' + c.nombre + ' eliminado con éxito!' }];
+            this.getCargos(0);
           }
         )
         window.scroll(0, 0);
 
       },
       reject: () => {
-        this.selectedMarca = new Marca();
+        this.selectedCargo = new Cargo();
       }
     });
   }
 }
-

@@ -30,6 +30,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Paises', icon: 'fa fa-globe', routerLink: ['/paises'] },
                     { label: 'Marcas', icon: 'fa fa-car', routerLink: ['/marcas'] }, 
+                    { label: 'Cargos', icon: 'fa fa-child', routerLink: ['/cargos'] },
                                        
                 ]
             },

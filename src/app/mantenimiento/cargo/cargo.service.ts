@@ -5,40 +5,40 @@ import { Observable, throwError } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
 import { Router } from '@angular/router';
-import { Marca } from 'src/app/models/marca';
+import { Cargo } from 'src/app/models/cargo';
 
 
 @Injectable()
-export class MarcaService {
-  private urlEndPoint: string = 'http://localhost:8080/marca/marcas';  
+export class CargoService {
+  private urlEndPoint: string = 'http://localhost:8080/cargo/cargos';  
 
   constructor(private http: HttpClient, private router: Router) { }
 
 
-  getMarcas(page: number): Observable<any> {
+  getCargos(page: number): Observable<any> {
     return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
       tap((response: any) => {
-        console.log('MarcaService: tap 1');
-        (response.content as Marca[]).forEach(Marca => console.log(Marca.nombre));
+        console.log('CargoService: tap 1');
+        (response.content as Cargo[]).forEach(Cargo => console.log(Cargo.nombre));
       }),
       map((response: any) => {
-        (response.content as Marca[]).map(Marca => {
-          Marca.nombre = Marca.nombre.toUpperCase();
-          return Marca;
+        (response.content as Cargo[]).map(Cargo => {
+            Cargo.nombre = Cargo.nombre.toUpperCase();
+          return Cargo;
         });
         return response;
       }),
       tap(response => {
-        console.log('MarcaService: tap 2');
-        (response.content as Marca[]).forEach(Marca => console.log(Marca.nombre));
+        console.log('CargoService: tap 2');
+        (response.content as Cargo[]).forEach(Cargo => console.log(Cargo.nombre));
       }));
   }
 
-  getMarca(id): Observable<Marca> {
-    return this.http.get<Marca>(`${this.urlEndPoint}/${id}`).pipe(
+  getCargo(id): Observable<Cargo> {
+    return this.http.get<Cargo>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
         if (e.status != 401 && e.error.mensaje) {
-          this.router.navigate(['/marcas']);
+          this.router.navigate(['/cargos']);
           console.error(e.error.mensaje);
         }
 
@@ -46,10 +46,10 @@ export class MarcaService {
       }));
   }
 
-  create(Marca: Marca): Observable<Marca> {
-    return this.http.post(this.urlEndPoint, Marca)
+  create(Cargo: Cargo): Observable<Cargo> {
+    return this.http.post(this.urlEndPoint, Cargo)
       .pipe(
-        map((response: Marca) => Marca as Marca),
+        map((response: Cargo) => Cargo as Cargo),
         catchError(e => {
           if (e.status == 400) {
             return throwError(e);
@@ -61,9 +61,9 @@ export class MarcaService {
         }));
   }
 
-  update(Marca: Marca): Observable<any> {
-    return this.http.put<any>(`${this.urlEndPoint}/${Marca.idMarca}`, Marca).pipe(
-      map((response: Marca) => Marca as Marca),
+  update(Cargo: Cargo): Observable<any> {
+    return this.http.put<any>(`${this.urlEndPoint}/${Cargo.idCargo}`, Cargo).pipe(
+      map((response: Cargo) => Cargo as Cargo),
       catchError(e => {
         if (e.status == 400) {
           return throwError(e);
@@ -75,8 +75,8 @@ export class MarcaService {
       }));
   }
 
-  delete(id: number): Observable<Marca> {
-    return this.http.delete<Marca>(`${this.urlEndPoint}/${id}`).pipe(
+  delete(id: number): Observable<Cargo> {
+    return this.http.delete<Cargo>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
         if (e.error.mensaje) {
           console.error(e.error.mensaje);

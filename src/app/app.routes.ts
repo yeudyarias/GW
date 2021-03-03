@@ -20,6 +20,7 @@ import { AuthGuard } from './usuarios/guards/auth.guard';
 import { RoleGuard } from './usuarios/guards/role.guard';
 import { PaisComponent } from './mantenimiento/pais/pais.component';
 import { MarcaComponent } from './mantenimiento/marca/marca.component';
+import { CargoComponent } from './mantenimiento/cargo/cargo.component';
 
 
 export const routes: Routes = [
@@ -41,7 +42,8 @@ export const routes: Routes = [
     { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
     { path: 'login', component: LoginComponent },
     { path: 'paises', component: PaisComponent },
-    { path: 'marcas', component: MarcaComponent }
+    { path: 'marcas', component: MarcaComponent },
+    { path: 'cargos', component: CargoComponent }
 ];
 
 export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes,
