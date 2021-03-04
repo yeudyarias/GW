@@ -59,10 +59,10 @@ export class MarcaComponent implements OnInit {
   }
 
   private getMarcas(page: number) {
-    this.marcaService.getUsuariosClinico(page)
+    this.marcaService.getMarcas(page)
       .pipe(
         tap(response => {
-          console.log('MarcasComponent: tap 3');
+          console.log('PaisesComponent: tap 3');
           (response.content as Marca[]).forEach(cliente => console.log(cliente.nombre));
         })
       ).subscribe(response => {
@@ -71,7 +71,7 @@ export class MarcaComponent implements OnInit {
         this.totalRecords = this.paginador.totalPages * 10;
       });
   }
-
+  
   createMarca(): void {
     console.log(this.selectedMarca);
     this.marcaService.create(this.selectedMarca)

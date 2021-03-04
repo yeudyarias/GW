@@ -49,7 +49,7 @@ export class MarcaService {
   create(Marca: Marca): Observable<Marca> {
     return this.http.post(this.urlEndPoint, Marca)
       .pipe(
-        map((response: Marca) => Marca as Marca),
+        map((response: any) => Marca as Marca),
         catchError(e => {
           if (e.status == 400) {
             return throwError(e);
@@ -63,7 +63,6 @@ export class MarcaService {
 
   update(Marca: Marca): Observable<any> {
     return this.http.put<any>(`${this.urlEndPoint}/${Marca.idMarca}`, Marca).pipe(
-      map((response: Marca) => Marca as Marca),
       catchError(e => {
         if (e.status == 400) {
           return throwError(e);
@@ -84,5 +83,4 @@ export class MarcaService {
         return throwError(e);
       }));
   }
-  
 }
