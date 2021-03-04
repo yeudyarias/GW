@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent } from 'primeng/primeng';
 import { tap } from 'rxjs/operators';
 import { Pais } from 'src/app/models/pais';
-import { Message } from 'primeng/primeng';
 import { ModalService } from 'src/app/usuario-clinico/detalle/modal.service';
-import { BreadcrumbService } from 'src/app/breadcrumb.service';
 import { PaisService } from './pais.service';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, Message, MessageService } from 'primeng/api';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
+
+
 
 @Component({
   selector: 'app-pais',
   templateUrl: './pais.component.html',
+  providers: [MessageService],
   styleUrls: ['./pais.component.css']
 })
 export class PaisComponent implements OnInit {
@@ -19,7 +20,7 @@ export class PaisComponent implements OnInit {
   paises: Pais[];
   pp: Pais[];
   paisModel: Pais = new Pais();
-  pais: Pais = new Pais();  
+  pais: Pais = new Pais();
   cols: any[];
   selectedPais: Pais;
   paginador: any;
@@ -33,9 +34,10 @@ export class PaisComponent implements OnInit {
 
   constructor(private paisService: PaisService,
     private router: Router,
+    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private modalService: ModalService,
-    private breadcrumbService: BreadcrumbService) {
+    private breadcrumbService: AppBreadcrumbService) {
     this.breadcrumbService.setItems([
       { label: 'Paises', routerLink: ['/paises'] }
     ]);
@@ -48,7 +50,7 @@ export class PaisComponent implements OnInit {
       { field: 'descripcion', header: 'Descripcion' }
     ];
 
-    this.getPaises(0);
+    //this.getPaises(0);
     this.selectedPais = new Pais();
 
     this.modalService.notificarUpload.subscribe(pais => {
@@ -74,23 +76,24 @@ export class PaisComponent implements OnInit {
 
   validarPaises(): any {
     var result = false;
-    this.paises.forEach(p => {
-      if (p.nombre != null && this.selectedPais.nombre && p.nombre.toUpperCase() == this.selectedPais.nombre.toUpperCase()) {
+    if (this.paises != undefined && this.paises.length > 0) {
+      this.paises.forEach(p => {
+        if (p.nombre != null && this.selectedPais.nombre && p.nombre.toUpperCase() == this.selectedPais.nombre.toUpperCase()) {
           if (this.selectedPais.idPais != null && this.selectedPais.idPais != p.idPais) {
             result = true;
           } else {
             result = true;
           }
-      }
-    });        
+        }
+      });
+    }
     return result;
   }
-
 
   guardarPais(table): void {
     this.msgs = [];
     if (this.validarPaises()) {
-      this.msgs.push({ severity: 'error', summary: 'Pais Duplicado', detail: 'Pais '+this.selectedPais.nombre+' ya existe' });
+      this.msgs.push({ severity: 'error', summary: 'Pais Duplicado', detail: 'Pais ' + this.selectedPais.nombre + ' ya existe' });
       return;
     }
     if (this.selectedPais.idPais != null) {
@@ -114,7 +117,7 @@ export class PaisComponent implements OnInit {
         err => {
           this.errores = err.error.errors as string[];
           if (this.errores === undefined) {
-            this.msgs.push({ severity: 'error', summary: 'Error', detail: err.error.mensaje as string +"\n"});
+            this.msgs.push({ severity: 'error', summary: 'Error', detail: err.error.mensaje as string + "\n" });
           } else {
             this.getErrores();
           }
@@ -131,7 +134,7 @@ export class PaisComponent implements OnInit {
     this.paisService.update(this.selectedPais)
       .subscribe(
         json => {
-          this.msgs.push({ severity: 'success', summary: 'Pais Actualizado', detail: `El pais ${json.nombre} ha sido actualizado con éxito`  });
+          this.msgs.push({ severity: 'success', summary: 'Pais Actualizado', detail: `El pais ${json.nombre} ha sido actualizado con éxito` });
           this.selectedPais = new Pais();
         },
         err => {
@@ -163,12 +166,13 @@ export class PaisComponent implements OnInit {
   }
 
   selectPais(c: Pais): void {
-    this.selectedPais = {...c};    
+    this.selectedPais = { ...c };
   }
 
   limpiar(): void {
     this.msgs = [];
     this.paisModel = new Pais
+    this.selectedPais = new Pais();
     console.log(this.paisModel);
   }
 

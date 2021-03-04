@@ -1,0 +1,35 @@
+<div class="login-body">
+    <div class="body-container">
+        <div class="p-grid">
+            <div class="p-col-12 p-lg-6 left-side">
+                <img src="assets/layout/images/logo-dark.png" alt="apollo-layout" class="logo"/>
+                <h1>Welcome</h1>
+                <p>
+                    Sign in to start your session
+                </p>
+            </div>
+            <div class="p-col-12 p-lg-6 right-side">
+                <div class="login-wrapper">
+                    <div class="login-container">
+                        <span class="title">Login</span>
+
+                        <div class="p-grid p-fluid">
+                            <div class="p-col-12">
+                                <input pInputText type="text" placeholder="Username">
+                            </div>
+                            <div class="p-col-12">
+                                <input pInputText type="password" placeholder="Password"/>
+                            </div>
+                            <div class="p-col-6">
+                                <button pButton label="Sign In" icon="pi pi-check" [routerLink]="['/']"></button>
+                            </div>
+                            <div class="p-col-6 password-container">
+                                <button class="p-link">Forgot Password?</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

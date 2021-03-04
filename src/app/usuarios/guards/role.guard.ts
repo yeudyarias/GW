@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'

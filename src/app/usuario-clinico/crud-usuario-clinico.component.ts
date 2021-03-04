@@ -4,10 +4,10 @@ import { ClienteModel } from './cliente-model';
 import { Contacto } from './contacto';
 import { Modelo } from '../models/sexo';
 import { ClienteService } from './usuario-clinico.service';
-import { BreadcrumbService } from '../breadcrumb.service';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { AppBreadcrumbService } from '../app.breadcrumb.service';
 
 @Component({
     selector: 'crud-clientes',
@@ -33,7 +33,7 @@ export class CRUDClientesComponent implements OnInit {
     fechaNa: Date;
     errores: string[];
 
-    constructor(private breadcrumbService: BreadcrumbService,
+    constructor(private breadcrumbService: AppBreadcrumbService,
         private clienteService: ClienteService,
         private router: Router,
         private confirmationService: ConfirmationService,

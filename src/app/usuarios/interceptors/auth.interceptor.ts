@@ -5,7 +5,7 @@ import {
 
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 

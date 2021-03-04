@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent } from 'primeng/primeng';
+import { LazyLoadEvent } from 'primeng/api';
 import { tap } from 'rxjs/operators';
 import { Marca } from 'src/app/models/marca';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 import { ModalService } from 'src/app/usuario-clinico/detalle/modal.service';
-import { BreadcrumbService } from 'src/app/breadcrumb.service';
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { MarcaService } from './marca.service';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
   selector: 'app-marca',
@@ -35,7 +35,7 @@ export class MarcaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private modalService: ModalService,
-    private breadcrumbService: BreadcrumbService) {
+    private breadcrumbService: AppBreadcrumbService) {
     this.breadcrumbService.setItems([
       { label: 'Marcas', routerLink: ['/marcas'] }
     ]);
