@@ -146,6 +146,10 @@ import { PaisService } from './mantenimiento/pais/pais.service';
 import { MarcaService } from './mantenimiento/marca/marca.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PaisComponent } from './mantenimiento/pais/pais.component';
+import { LoginComponent } from './usuarios/login.component';
+import { ClientesComponent } from './usuario-clinico/usuario-clinico.component';
+import { ClienteService } from './usuario-clinico/usuario-clinico.service';
+import { CRUDClientesComponent } from './usuario-clinico/crud-usuario-clinico.component';
 
 
 @NgModule({
@@ -284,11 +288,14 @@ import { PaisComponent } from './mantenimiento/pais/pais.component';
         AppErrorComponent,
         AppAccessdeniedComponent,
         PaisComponent,
+        LoginComponent,
+        ClientesComponent,
+        CRUDClientesComponent,
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, PaisService, MarcaService, ConfirmationService,MessageService
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, PaisService, MarcaService, ConfirmationService,MessageService,ClienteService
     ],
     bootstrap: [AppComponent]
 })

@@ -1,13 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MenuService} from './app.menu.service';
 import {PrimeNGConfig} from 'primeng/api';
 import {AppComponent} from './app.component';
+import { AuthService } from './usuarios/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-main',
     templateUrl: './app.main.component.html'
 })
-export class AppMainComponent {
+export class AppMainComponent implements OnInit {
 
     topbarMenuActive: boolean;
 
@@ -29,7 +31,15 @@ export class AppMainComponent {
 
     configActive: boolean;
 
-    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig, public app: AppComponent) {}
+    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig, public app: AppComponent, private router: Router,
+        private authService: AuthService) {}
+
+    ngOnInit() {
+        if (!this.authService.isAuthenticated()) {
+          console.log("Entro");
+          this.router.navigate(['/login']);
+        }
+      }
 
     onLayoutClick() {
         if (!this.topbarItemClick) {

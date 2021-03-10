@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from './usuario';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import {Message} from 'primeng//api';
+import {Message, MessageService} from 'primeng//api';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   usuario: Usuario;
   msgs: Message[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,private service: MessageService) {
     this.usuario = new Usuario();
   }
 
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     console.log(this.usuario);
     if (this.usuario.username == null || this.usuario.password == null) {
       this.msgs = [];
-      this.msgs.push({severity:'error', summary:'Error Login', detail:'Usuario o Contraseña vacías!'});
+      this.service.add({severity:'error', summary:'Error Login', detail:'Usuario o Contraseña vacías!'});
       return;
     }
 

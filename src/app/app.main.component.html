@@ -1,5 +1,8 @@
-<div class="layout-wrapper" (click)="onLayoutClick()"
-     [ngClass]="{'layout-horizontal': isHorizontal(),
+<div *ngIf="!authService.isAuthenticated()">
+    <app-login> </app-login>
+</div>
+<div *ngIf="authService.isAuthenticated()" class="layout-wrapper" (click)="onLayoutClick()"
+    [ngClass]="{'layout-horizontal': isHorizontal(),
                  'layout-overlay': isOverlay(),
                  'layout-static': isStatic(),
                  'layout-slim':isSlim(),

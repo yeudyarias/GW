@@ -88,7 +88,7 @@ import { MarcaComponent } from './mantenimiento/marca/marca.component';
                     { path: 'lista-pacientes', component: ClientesComponent },
                     { path: 'administrar-pacientes', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
                     { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
-                    { path: 'login', component: LoginComponent },
+                    
                     { path: 'paises', component: PaisComponent },
                     { path: 'marcas', component: MarcaComponent }
                 ]
@@ -96,7 +96,7 @@ import { MarcaComponent } from './mantenimiento/marca/marca.component';
             {path: 'error', component: AppErrorComponent},
             {path: 'access', component: AppAccessdeniedComponent},
             {path: 'notfound', component: AppNotfoundComponent},
-            {path: 'login', component: AppLoginComponent},
+            { path: 'login', component: LoginComponent },
             {path: '**', redirectTo: '/notfound'},
         ], {scrollPositionRestoration: 'enabled'})
     ],
