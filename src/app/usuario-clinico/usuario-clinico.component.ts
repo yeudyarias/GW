@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClienteService } from './usuario-clinico.service';
-import { BreadcrumbService } from '../breadcrumb.service';
 import { ModalService } from './detalle/modal.service';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 import { AuthService } from '../usuarios/auth.service';
-import { LazyLoadEvent } from 'primeng/primeng';
+import { LazyLoadEvent } from 'primeng/api';
 import { tap } from 'rxjs/operators';
+import { AppBreadcrumbService } from '../app.breadcrumb.service';
 
 @Component({
   selector: 'app-clientes',
@@ -31,9 +31,9 @@ export class ClientesComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
      private authService: AuthService,
     private modalService: ModalService,
-    private breadcrumbService: BreadcrumbService) {
+    private breadcrumbService: AppBreadcrumbService) {
     this.breadcrumbService.setItems([
-        { label: 'Lista Pacientes', routerLink: ['/lista-pacientes'] }
+        { label: 'Lista Empleados', routerLink: ['/lista-empleados'] }
     ]);
   }
 

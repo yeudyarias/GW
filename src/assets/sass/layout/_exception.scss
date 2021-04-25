@@ -1,6 +1,6 @@
 /* Exception */
 .exception-body {
-    height: 100%;
+    height: 100vh;
     font-size: 16px;
     margin: 0;
     @include border-box();
@@ -36,17 +36,17 @@
 
     &.error-body {
         background-image: url("../images/error.png");
-        border-top: 7px solid $red;
+        border-top: 7px solid #EF5350;
     }
 
     &.access-body {
         background-image: url("../images/access.png");
-        border-top: 7px solid $orange;
+        border-top: 7px solid #f6a821;
     }
 
     &.notfound-body {
         background-image: url("../images/404.png");
-        border-top: 7px solid $yellow;
+        border-top: 7px solid #ffc800;
     }
 }
 
@@ -73,22 +73,5 @@
             }
         }
     }
-}
-
-.ui-button {
-  display: inline-block;
-  position: relative;
-  padding: 0;
-  margin-right: .1em;
-  text-decoration: none !important;
-  cursor: pointer;
-  text-align: center;
-  zoom: 1;
-  overflow: visible; /* the overflow property removes extra width in IE */
-}
-
-.ui-button-text-only .ui-button-text {
-  padding: .25em 1em;
-  display: block;
 }
 

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario } from './usuario';
+import { Role } from './role';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +13,19 @@ export class AuthService {
 
   private _usuario: Usuario;
   private _token: string;
+  private urlEndPointUsuarios: string = 'http://localhost:8080/api/usuarios';
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private sanitizer: DomSanitizer) { }
+
+  private agregarAuthorizationHeader() {
+    let token = this.token;
+    if (token != null) {
+      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
+    }
+
+    return this.httpHeaders;
+  }
 
   public get usuario(): Usuario {
     if (this._usuario != null) {
@@ -58,8 +72,47 @@ export class AuthService {
     this._usuario.apellido = payload.apellido;
     this._usuario.email = payload.email;
     this._usuario.username = payload.user_name;
+    this._usuario.foto = payload.foto;
+    if (payload.foto) {
+      this._usuario.picByte = payload.picByte;
+      this._usuario.fotoLista = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + payload.picByte);
+    }    
     this._usuario.roles = payload.authorities;
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
+  }
+
+  guardarUsuarioModificado(usuario: Usuario): void {
+    let payload = this.obtenerDatosToken(this.token);
+    this._usuario = new Usuario();
+    this._usuario.nombre = usuario.nombre;
+    this._usuario.apellido = usuario.apellido;
+    this._usuario.email = usuario.email;
+    this._usuario.username = usuario.username;
+    this._usuario.foto = usuario.foto;    
+    this._usuario.picByte = usuario.picByte;
+    this._usuario.fotoLista = usuario.fotoLista;
+    this._usuario.roles = payload.authorities;
+    sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
+  }
+
+  restablecerPassword(Usuario: Usuario): Observable<any> {
+    return this.http.put<any>(`${this.urlEndPointUsuarios+'/update-password'}`, Usuario,{headers: this.agregarAuthorizationHeader()}).pipe(      
+      catchError(e => {
+        if (e.status == 400) {
+          return throwError(e);
+        }
+        return throwError(e);
+      }));
+  }
+
+  delete(id: number): Observable<Usuario> {
+    return this.http.delete<Usuario>(`${this.urlEndPointUsuarios}/${id}`).pipe(
+      catchError(e => {
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      }));
   }
 
   guardarToken(accessToken: string): void {
@@ -82,11 +135,21 @@ export class AuthService {
     return false;
   }
 
-  hasRole(role: string): boolean {
+
+  hasRole(role: Role): boolean {
     if (this.usuario.roles.includes(role)) {
       return true;
     }
-    return false;
+   return false;
+  }
+
+  hasRoleUser(role: Role): boolean {
+    for (let i =0; this.usuario.roles.length < i; i++ ) {
+      if (this.usuario.roles[i].codigo == role.codigo) {
+        return true;
+      }
+    }
+   return false;
   }
 
   logout(): void {
@@ -96,4 +159,6 @@ export class AuthService {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('usuario');
   }
+
+
 }

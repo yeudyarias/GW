@@ -1,12 +1,50 @@
+@mixin circle($color){
+    width: 10.714em;
+    height: 10.714em;
+    border: 10px solid $dividerColor;
+    border-right-color: $color;
+    border-top-color: $color;
+    border-bottom-color: $color;
+    border-left-color: $color;
+    border-radius: 50%;
+    margin: auto;
+}
+@mixin circle-icon($color){
+    position: relative;
+    font-size: 24px;
+    left: 50%;
+    top: 20%;
+    width: 36px;
+    height: 36px;
+    margin-left: -20px;
+    color: $color;
+    text-align: center;
+}
+
+@mixin circle-text($color){
+    width: 79px;
+    height: 50px;
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    top: 40%;
+    left: 50%;
+    margin-left: -35px;
+    color: $color;
+    font-weight: bold;
+    font-size: 30px;
+}
+
 /* Dashboard */
 .dashboard {
-    .ui-panel {
-        border: 0 none;
-        @include shadow(0 2px 4px 0px rgba(0, 0, 0, 0.3));
+    margin: 0;
+
+    > .p-col-12 {
+        padding: .75rem;
     }
 
     .overview-box {
-        @include shadow(0 3px 8px 0 rgba(0, 0, 0, 0.3));
+        box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.3);
         padding: 15px;
         position: relative;
         min-height: 100px;
@@ -42,6 +80,11 @@
                 width: 20px;
                 height: 20px;
                 background-color: #ffffff;
+
+                i {
+                    vertical-align: middle;
+                    font-size: inherit;
+                }
             }
 
             .overview-ratio-value {
@@ -105,7 +148,7 @@
     }
 
     .disk-spaces {
-        .ui-panel-content {
+        .p-panel-content {
             padding: 2em;
 
             span {
@@ -113,7 +156,7 @@
                 margin-bottom: 20px;
             }
 
-            .ui-progressbar {
+            .p-progressbar {
                 margin-bottom: 40px;
                 height: 5px;
             }
@@ -123,9 +166,9 @@
     .task-list {
         overflow: hidden;
 
-        .ui-panel-content {
-            padding: 0px !important;
-            min-height: 366px;
+        .p-panel-content {
+            min-height: 350px;
+            padding: 0;
         }
 
         ul {
@@ -142,7 +185,7 @@
                 }
             }
 
-            .ui-chkbox {
+            .p-checkbox {
                 vertical-align: middle;
                 margin-right: 6px;
             }
@@ -154,7 +197,7 @@
             i {
                 color: $textSecondaryColor;
                 float: right;
-                font-size: 16px;
+                font-size: 20px;
                 margin-top: 2px;
                 @include opacity(.7);
             }
@@ -164,13 +207,13 @@
     .contact-form {
         overflow: hidden;
 
-        .ui-panel {
-            .ui-panel-content {
-                min-height: 366px;
+        .p-panel {
+            .p-panel-content {
+                min-height: 350px;
             }
         }
 
-        .ui-g-12 {
+        .p-col-12 {
             padding: 10px 15px;
 
             &:last-child {
@@ -183,9 +226,9 @@
     .contacts {
         overflow: hidden;
 
-        .ui-panel {
-            .ui-panel-content {
-                min-height: 366px;
+        .p-panel {
+            .p-panel-content {
+                min-height: 350px;
                 padding: 0px !important;
             }
         }
@@ -199,12 +242,11 @@
                 border-bottom: 1px solid $dividerColor;
                 padding: 10px 15px;
                 width: 100%;
-                box-sizing: border-box;
                 text-decoration: none;
                 position: relative;
                 display: block;
-                @include border-radius(2px);
-                @include transition(background-color .2s);
+                border-radius: $borderRadius;
+                transition: background-color .2s;
 
                 img {
                     float: left;
@@ -245,13 +287,17 @@
     }
 
     .chat {
-
-        .ui-panel-content {
+        .p-panel-content {
             padding: 0 !important;
         }
 
         .sales-panel {
             margin-top: 15px;
+
+            .card {
+                padding: 0;
+                margin: 0;
+            }
         }
 
         ul {
@@ -272,12 +318,10 @@
                     float: left;
                     display: inline-block;
                     margin: 4px 0;
-                    @include border-radius($borderRadius);
+                    border-radius: $borderRadius;
                 }
 
                 &.message-from {
-
-
                     img, span {
                         float: left;
                     }
@@ -287,7 +331,7 @@
                     }
 
                     span {
-                        background-color: $blue;
+                        background-color: #39a3f4;
                         color: #ffffff;
                     }
                 }
@@ -302,8 +346,8 @@
                     }
 
                     span {
-                        background-color: $green;
-                        color: #ffffff;
+                        background-color: #dee2e6;
+                        color: #000000;
                     }
                 }
             }
@@ -324,7 +368,7 @@
 
                 i {
                     line-height: inherit;
-                    font-size: 24px;
+                    font-size: 20px;
                 }
             }
 
@@ -341,18 +385,17 @@
                     background-color: transparent;
                     outline: 0 none;
                     padding-left: 8px;
-                    @include no-shadow();
+                    box-shadow: none;
                 }
             }
         }
     }
 
     .timeline {
-        box-sizing: border-box;
-        margin-top: 0;
+        margin: 0;
 
-        > .ui-g {
-            .ui-g-3 {
+        > .p-grid {
+            .p-col-3 {
                 font-size: 14px;
                 position: relative;
                 border-right: 1px solid $dividerColor;
@@ -360,16 +403,12 @@
                 i {
                     font-size: 24px;
                     position: absolute;
-                    top: 6px;
-                    right: -12px;
+                    right: -16px;
                 }
             }
 
-            .ui-g-9 {
+            .p-col-9 {
                 padding-left: 1.5em;
-                .event-owner {
-
-                }
 
                 .event-text {
                     color: $textSecondaryColor;
@@ -388,10 +427,8 @@
     }
 
     .user-card {
-        border:1px solid $dividerColor;
+        border: 1px solid $dividerColor;
         padding: 0;
-        margin: 0;
-        @include border-radius($borderRadius);
 
         .user-card-header {
             height: 100px;
@@ -402,7 +439,7 @@
                 width: 100%;
             }
 
-            .ui-button {
+            .p-button {
                 position: absolute;
                 width: 36px;
                 height: 36px;
@@ -437,9 +474,9 @@
                 text-align: left;
 
                 ul {
-                   padding: 0px 0 32px 0;
-                   margin: 0;
-                   list-style-type: none;
+                    padding: 0px 0 32px 0;
+                    margin: 0;
+                    list-style-type: none;
 
                     li {
                         padding: 16px 24px;
@@ -466,14 +503,13 @@
                         }
 
                         .project-progressbar {
-                            display: inline-block;
                             width: 100px;
                             background-color: $dividerColor;
                             float: right;
                             margin-top: 12px;
 
                             .project-progressbar-value {
-                                @include border-radius($borderRadius);
+                                border-radius: $borderRadius;
                                 background-color: $primaryColor;
                                 height: 4px;
                             }
@@ -490,14 +526,15 @@
         }
     }
 
-    .status-title{
+    .status-title {
         margin-bottom: 0.714em;
         font-size: 1.429em;
         text-align: center;
     }
 
-    .circle1{
+    .circle1 {
         @include circle(#6ebc3b);
+        border-left-color: $dividerColor;
         i {
             @include circle-icon(#6ebc3b);
         }
@@ -505,8 +542,11 @@
             @include circle-text(#6ebc3b)
         }
     }
-    .circle2{
+    .circle2 {
         @include circle(#f6a821);
+        border-bottom-color: $dividerColor;
+        border-left-color: $dividerColor;
+        border-right-color: $dividerColor;
         i {
             @include circle-icon(#f6a821);
         }
@@ -514,8 +554,10 @@
             @include circle-text(#f6a821)
         }
     }
-    .circle3{
+    .circle3 {
         @include circle(#039ade);
+        border-bottom-color: $dividerColor;
+        border-right-color: $dividerColor;
         i {
             @include circle-icon(#039ade);
         }
@@ -523,7 +565,8 @@
             @include circle-text(#039ade)
         }
     }
-    .circle4{
+    .circle4 {
+        border-left-color: $dividerColor;
         @include circle(#d66351);
         i {
             @include circle-icon(#d66351);
@@ -533,15 +576,39 @@
         }
     }
 
-    .circle-panel{
-        .ui-panel-titlebar {
+    .circle-panel {
+        .p-panel-header {
             text-align: center;
+
+            .p-panel-title {
+                width: 100%;
+            }
         }
-        .ui-panel-content{
-            padding: 0px;
+        .p-panel-content{
+            padding: 0;
         }
-        div.ui-g-12:not(:last-child) {
-          border-right: 1px solid $dividerColor;
+
+        .p-grid > div {
+            padding: 2em 0;
+        }
+
+        div.p-col-12:not(:last-child) {
+            border-right: 1px solid $dividerColor;
+        }
+    }
+
+    .p-panel {
+        border: 0 none;
+        border-radius: 3px;
+        box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.3);
+    }
+}
+@media (max-width: 1024px) {
+    .dashboard {
+        .circle-panel {
+            div.p-col-12:not(:last-child) {
+                border-right: 0 none;
+            }
         }
     }
 }

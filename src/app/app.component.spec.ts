@@ -6,7 +6,7 @@ import {AppTopBarComponent} from './app.topbar.component';
 import {AppConfigComponent} from './app.config.component';
 import {AppFooterComponent} from './app.footer.component';
 import {AppBreadcrumbComponent} from './app.breadcrumb.component';
-import {BreadcrumbService} from './breadcrumb.service';
+import {AppBreadcrumbService} from './app.breadcrumb.service';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {ProgressBarModule} from 'primeng/progressbar';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
@@ -32,7 +32,7 @@ describe('AppComponent', () => {
                 AppFooterComponent,
                 AppBreadcrumbComponent
             ],
-            providers: [BreadcrumbService]
+            providers: [AppBreadcrumbService]
         }).compileComponents();
     }));
     it('should create the app', async(() => {

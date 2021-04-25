@@ -4,6 +4,7 @@
 
 html {
     height: 100%;
+    font-size: $fontSize;
 }
 
 /* Main Layout */
@@ -19,11 +20,15 @@ body {
     background-color: $bodyBgColor;
     color: $textColor;
 
-    .layout-wrapper {
+    a {
+        text-decoration: none;
+        color: $primaryColor;
+    }
 
+    .layout-wrapper {
         .topbar {
             background-color: $primaryColor;
-            padding: 10px 30px;
+            padding: 10px 16px;
             height: 50px;
             box-sizing: border-box;
             position: fixed;
@@ -54,51 +59,6 @@ body {
                 }
             }
 
-            .topbar-themeswitcher {
-                position: relative;
-                float: right;
-                top: 8px;
-                right: 10px;
-
-                .ui-inputswitch {
-
-                    .ui-inputswitch-slider {
-                        background-color: #ffffff;
-                        border-color:#d8d8d8;
-
-                        &:before {
-                            background-color: #d8d8d8;
-                        }
-                    }
-
-                    &.ui-inputswitch-checked {
-                        .ui-inputswitch-slider {
-                            background-color: #243447;
-                            border-color: #243447;
-
-                            &:before {
-                                background-color: #0e141c;
-                                color: #0e141c;
-                            }
-                        }
-
-                        &:not(.ui-state-disabled):hover {
-                            .ui-inputswitch-slider {
-                                background-color: #243447;
-                                border-color: #243447;
-                            }
-                        }
-
-                        &.ui-inputswitch-focus {
-                            .ui-inputswitch-slider {
-                                background-color: #243447;
-                                border-color: #243447;
-                            }
-                        }
-                    }
-                }
-            }
-
             .topbar-search {
                 padding: 0;
                 position: relative;
@@ -118,14 +78,33 @@ body {
                     margin: 0px;
                     @include border-radius(2px);
 
-                    &::-webkit-input-placeholder { color:$primaryTextColor;; opacity: .7; @include transition(opacity $transitionDuration);}
-                    &:-moz-placeholder { color:$primaryTextColor;; opacity: .7; @include transition(opacity $transitionDuration);}
-                    &::-moz-placeholder { color:$primaryTextColor;; opacity: .7; @include transition(opacity $transitionDuration);}
-                    &:-ms-input-placeholder { color:$primaryTextColor;; opacity: .7; @include transition(opacity $transitionDuration);}
+                    &::-webkit-input-placeholder {
+                        color: $primaryTextColor;;
+                        opacity: .7;
+                        @include transition(opacity $transitionDuration);
+                    }
+
+                    &:-moz-placeholder {
+                        color: $primaryTextColor;;
+                        opacity: .7;
+                        @include transition(opacity $transitionDuration);
+                    }
+
+                    &::-moz-placeholder {
+                        color: $primaryTextColor;;
+                        opacity: .7;
+                        @include transition(opacity $transitionDuration);
+                    }
+
+                    &:-ms-input-placeholder {
+                        color: $primaryTextColor;;
+                        opacity: .7;
+                        @include transition(opacity $transitionDuration);
+                    }
                 }
 
-                .fa {
-                    font-size: 18px;
+                .topbar-search-icon {
+                    font-size: 16px;
                     position: absolute;
                     top: 4px;
                     right: 5px;
@@ -133,9 +112,14 @@ body {
                 }
             }
 
-            .logo {
-                height: 30px;
-                margin-left: 17px;
+            .topbar-logo {
+                height: 100%;
+                width: 185px;
+                display: inline-block;
+
+                .logo {
+                    height: 30px;
+                }
             }
 
             .profile {
@@ -156,7 +140,7 @@ body {
                     color: $primaryTextColor;
                 }
 
-                .fa {
+                .profile-submenu-icon {
                     font-size: 16px;
                     vertical-align: middle;
                     color: $primaryTextColor;
@@ -187,6 +171,7 @@ body {
                         display: block;
 
                         i {
+                            font-size: 16px;
                             display: inline-block;
                             vertical-align: middle;
                         }
@@ -263,7 +248,7 @@ body {
                 @include overlay-shadow;
 
                 #menu-button {
-                  display: inline-block;
+                    display: inline-block;
                 }
             }
         }
@@ -271,10 +256,6 @@ body {
         &.layout-slim {
             .topbar {
                 @include overlay-shadow;
-
-                .logo {
-                  margin-left: -15px;
-                }
             }
         }
 
@@ -290,20 +271,28 @@ body {
             @include border-box();
             @include overlay-shadow;
 
-            .layout-menu-content {
-                width: 248px;
-                padding-right: 18px;
-                padding-bottom: 110px;
-            }
-
             .layout-menu {
                 margin: 0;
                 padding: 0;
                 list-style-type: none;
 
                 li {
+                    &.layout-root-menuitem {
+                        > .layout-menuitem-root-text {
+                            font-size: 1rem;
+                            text-transform: uppercase;
+                            font-weight: 500;
+                            padding: 1.5rem 0 0.5rem 1.5rem;
+                            color: $textColor;
+                        }
+
+                        > a {
+                            display: none;
+                        }
+                    }
+
                     > a {
-                        color: $menuitemTextColor;
+                        color: $textColor;
                         display: block;
                         cursor: pointer;
                         outline: none;
@@ -336,6 +325,12 @@ body {
                             padding-top: 1px;
                         }
 
+                        &.rotated-icon {
+                            .layout-menuitem-icon {
+                                transform: rotate(90deg);
+                            }
+                        }
+
                         .layout-menuitem-toggler {
                             @include transition(transform $transitionDuration);
                         }
@@ -343,40 +338,6 @@ body {
                         &.active-menuitem-routerlink {
                             color: $primaryColor;
                             font-weight: 700;
-                        }
-
-                        &:not(:hover) {
-                            &.blue-theme {
-                                i {color: $blue}
-                            }
-
-                            &.green-theme {
-                                i {color: $green}
-                            }
-
-                            &.cyan-theme {
-                                i {color: $cyan}
-                            }
-
-                            &.purple-theme {
-                                i {color: $purple}
-                            }
-
-                            &.indigo-theme {
-                                i {color: $indigo}
-                            }
-
-                            &.yellow-theme {
-                                i {color: $yellow}
-                            }
-
-                            &.orange-theme {
-                                i {color: $orange}
-                            }
-
-                            &.pink-theme {
-                                i {color: $pink}
-                            }
                         }
                     }
 
@@ -397,7 +358,7 @@ body {
                 }
 
                 .layout-menu-tooltip {
-                    display:none;
+                    display: none;
                     padding: 0 5px;
                     position: absolute;
                     left: 61px;
@@ -433,6 +394,11 @@ body {
         }
 
         .layout-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+
             .layout-breadcrumb {
                 background-color: $menuBgColor;
                 border-bottom: 1px solid $dividerColor;
@@ -443,18 +409,24 @@ body {
 
                 ul {
                     margin: 10px 0 0 0;
-                    padding: 0 0 0 12px;
+                    padding: 0;
                     list-style: none;
-                    color: $menuitemTextColor;
+                    color: $textColor;
                     display: inline-block;
 
                     li {
                         display: inline-block;
                         vertical-align: middle;
-                        color: $menuitemTextColor;
+                        color: $textColor;
+                        text-transform: capitalize;
+                        padding: 0 2px;
 
                         a {
-                            color: $menuitemTextColor;
+                            color: $textColor;
+
+                            i {
+                                font-size: 20px;
+                            }
                         }
                     }
                 }
@@ -465,6 +437,7 @@ body {
                     height: 100%;
 
                     a {
+                        font-family: $fontFamily;
                         color: $textSecondaryColor;
                         display: inline-block;
                         width: 42px;
@@ -472,7 +445,7 @@ body {
                         font-size: 20px;
                         line-height: 42px;
                         text-align: center;
-                        @include transition(background-color $transitionDuration);
+                        border-radius: 0;
 
                         &:hover {
                             background-color: $primaryColor;
@@ -480,6 +453,7 @@ body {
                         }
 
                         i {
+                            font-size: 18px;
                             line-height: inherit;
                         }
                     }
@@ -489,6 +463,7 @@ body {
 
             .layout-content-container {
                 padding: 20px 20px;
+                flex: 1 1 0;
             }
         }
 
@@ -503,12 +478,6 @@ body {
             .footer-text-right {
                 float: right;
                 font-weight: 700;
-            }
-        }
-
-        &.layout-slim {
-            .layout-footer {
-                padding-left: 100px;
             }
         }
     }
@@ -526,25 +495,32 @@ body {
                     padding: 0 20px;
                     width: 100%;
 
-                    .layout-menu-title {
-                        display: none;
-                    }
-
                     .layout-menu {
 
                         > li {
                             display: inline-block;
                             position: relative;
 
+                            &.layout-root-menuitem {
+                                > .layout-menuitem-root-text {
+                                    display: none;
+                                }
+
+                                > a {
+                                    display: block;
+                                }
+                            }
+
                             > a {
                                 padding: 12px;
                                 height: 50px;
+                                margin-bottom: -4px;
                                 border-bottom: 2px solid transparent;
                                 @include transition(border-bottom-color $transitionDuration, background-color $transitionDuration);
 
                                 &:hover {
                                     border-bottom-color: $primaryColor;
-                                    color: $menuItemHoverTextColor;
+                                    color: $primaryColor;
                                 }
                             }
 
@@ -559,6 +535,12 @@ body {
                                     left: 0;
                                     position: absolute;
                                     display: block;
+                                }
+                            }
+
+                            a {
+                                .layout-menuitem-toggler {
+                                    margin-left: .25em;
                                 }
                             }
 
@@ -597,7 +579,7 @@ body {
 
                                     &.active-menuitem {
                                         > a {
-                                            color: $menuItemActiveTextColor;
+                                            color: $primaryColor;
 
                                             &:hover {
                                                 color: $primaryTextColor;
@@ -621,13 +603,13 @@ body {
                                             ul {
                                                 li {
                                                     a {
-                                                      padding-left: 36px;
+                                                        padding-left: 36px;
                                                     }
 
                                                     ul {
                                                         li {
                                                             a {
-                                                              padding-left: 48px;
+                                                                padding-left: 48px;
                                                             }
 
                                                             ul {
@@ -688,26 +670,26 @@ body {
                 .layout-menu-container {
                     padding: 0;
                     width: 230px;
-                    height: 100%;
+                    height: calc(100% - 50px);
                     left: -230px;
                     overflow: auto;
                     @include transition(left $transitionDuration);
 
-                    .layout-menu-title {
-                        display: block;
-                        padding: 11px;
-                        font-size: 16px;
-                        color: $textSecondaryColor;
-                        border-bottom: 1px solid $dividerColor;
-                        letter-spacing: 2px;
+                    .layout-menu-content {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    }
+
+                    app-menu {
+                        flex: 1 1 0;
                     }
 
                     .layout-menu {
-
                         li {
                             a {
                                 padding: 10px 12px;
-                                display: block;
 
                                 &:hover {
                                     background-color: $primaryColor;
@@ -715,7 +697,7 @@ body {
                                 }
 
                                 i:first-child {
-                                    font-size: 18px;
+                                    font-size: 14px;
                                     vertical-align: middle;
                                     display: inline-block;
                                 }
@@ -735,8 +717,8 @@ body {
 
                             &.active-menuitem {
                                 > a {
-                                    background-color: $submenuActiveBgColor;
-                                    color: $menuItemActiveTextColor;
+                                    background-color: $menuitemActiveBgColor;
+                                    color: $primaryColor;
 
                                     &:hover {
                                         background-color: $primaryColor;
@@ -751,12 +733,9 @@ body {
                         }
 
                         > li {
-                            &:first-child {
-                                margin-top: 8px;
-                            }
 
                             ul {
-                                background: $submenuActiveBgColor;
+                                background: $menuBgColor;
 
                                 li {
                                     a {
@@ -800,6 +779,8 @@ body {
                     }
 
                     .layout-menu-footer {
+                        padding-bottom: 10px;
+
                         .layout-menu-footer-title {
                             display: block;
                             padding: 11px;
@@ -811,9 +792,9 @@ body {
 
                         .layout-menu-footer-content {
                             padding: 10px 12px;
-                            color: $menuitemTextColor;
+                            color: $textColor;
 
-                            .ui-progressbar {
+                            .p-progressbar {
                                 height: 5px;
                                 border: 0 none;
                                 margin: 16px 0 4px 0;
@@ -823,7 +804,7 @@ body {
                 }
             }
 
-            &.layout-overlay{
+            &.layout-overlay {
                 &.layout-overlay-active {
                     .layout-menu-container {
                         left: 0;
@@ -843,6 +824,7 @@ body {
                         margin-left: 0;
                     }
                 }
+
                 .layout-menu-container {
                     left: 0;
                 }
@@ -867,10 +849,9 @@ body {
                     width: 60px;
                     top: 50px;
                     position: fixed;
-                    overflow: auto;
 
 
-                    .layout-menu-title, .layout-menu-footer {
+                    .layout-menu-footer {
                         display: none;
                     }
 
@@ -885,12 +866,22 @@ body {
                         > li {
                             position: relative;
 
+                            &.layout-root-menuitem {
+                                > .layout-menuitem-root-text {
+                                    display: none;
+                                }
+
+                                > a {
+                                    display: block;
+                                }
+                            }
+
                             > a {
                                 text-align: center;
                                 padding-left: 0;
                                 padding-right: 0;
-                                padding-top: 10px;
-                                padding-bottom: 10px;
+                                padding-top: 14px;
+                                padding-bottom: 14px;
 
                                 i:first-child {
                                     font-size: 19px;
@@ -917,6 +908,7 @@ body {
                                 top: 0;
                                 left: 60px;
                                 min-width: 200px;
+                                display: none;
 
                                 li {
                                     a {
@@ -941,7 +933,7 @@ body {
 
                                     &.active-menuitem {
                                         > a {
-                                            color: $menuItemActiveTextColor;
+                                            color: $primaryColor;
 
                                             &:hover {
                                                 color: $primaryTextColor;
@@ -959,25 +951,25 @@ body {
 
                                         li {
                                             a {
-                                              padding-left: 24px;
+                                                padding-left: 24px;
                                             }
 
                                             ul {
                                                 li {
                                                     a {
-                                                      padding-left: 36px;
+                                                        padding-left: 36px;
                                                     }
 
                                                     ul {
                                                         li {
                                                             a {
-                                                              padding-left: 48px;
+                                                                padding-left: 48px;
                                                             }
 
                                                             ul {
                                                                 li {
                                                                     a {
-                                                                      padding-left: 60px;
+                                                                        padding-left: 60px;
                                                                     }
 
                                                                     ul {
@@ -999,19 +991,23 @@ body {
                             }
 
                             &.active-menuitem {
-                              > a {
-                                background-color: $submenuActiveBgColor;
-                                color: $menuItemActiveTextColor;
+                                > a {
+                                    background-color: $menuitemActiveBgColor;
+                                    color: $primaryColor;
 
-                                &:hover {
-                                  background-color: $primaryColor;
-                                  color: $primaryTextColor;
+                                    &:hover {
+                                        background-color: $primaryColor;
+                                        color: $primaryTextColor;
+                                    }
+
+                                    &:hover + .layout-menu-tooltip {
+                                        display: none;
+                                    }
                                 }
 
-                                &:hover + .layout-menu-tooltip {
-                                  display: none;
+                                > ul {
+                                    display: block;
                                 }
-                              }
                             }
                         }
                     }
@@ -1027,8 +1023,12 @@ body {
 
                 .profile {
                     .username {
-                      display: none;
+                        display: none;
                     }
+                }
+
+                .topbar-logo {
+                    width: auto;
                 }
 
                 #menu-button {
@@ -1047,8 +1047,9 @@ body {
                     }
                 }
             }
+
             .layout-mask {
-              display: none;
+                display: none;
             }
 
             .layout-menu-container {
@@ -1057,15 +1058,6 @@ body {
                 height: 100%;
                 left: -230px;
                 @include transition(left $transitionDuration);
-
-                .layout-menu-title {
-                    display: block;
-                    padding: 16px;
-                    font-size: 16px;
-                    color: $textSecondaryColor;
-                    border-bottom: 1px solid $dividerColor;
-                    letter-spacing: 2px;
-                }
 
                 .layout-menu {
 
@@ -1100,8 +1092,8 @@ body {
 
                         &.active-menuitem {
                             > a {
-                                background-color: $submenuActiveBgColor;
-                                color: $menuItemActiveTextColor;
+                                background-color: $menuitemActiveBgColor;
+                                color: $primaryColor;
 
                                 &:hover {
                                     background-color: $primaryColor;
@@ -1117,7 +1109,7 @@ body {
                         }
 
                         ul {
-                            background: $submenuActiveBgColor;
+                            background: $menuBgColor;
 
                             li {
                                 a {
@@ -1172,9 +1164,9 @@ body {
 
                     .layout-menu-footer-content {
                         padding: 10px 12px;
-                        color: $menuitemTextColor;
+                        color: $textColor;
 
-                        .ui-progressbar {
+                        .p-progressbar {
                             height: 5px;
                             border: 0 none;
                             margin: 16px 0 4px 0;
@@ -1186,6 +1178,8 @@ body {
             &.layout-mobile-active {
                 .layout-menu-container {
                     left: 0;
+                    overflow: auto;
+                    padding-bottom: 100px;
                 }
 
                 .layout-mask {

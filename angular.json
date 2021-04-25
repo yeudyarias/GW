@@ -3,154 +3,134 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "apollo": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "application",
-      "prefix": "app",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "aot": false,
-            "assets": [
-              "src/assets",
-              "src/upload.php",
-              "src/favicon.ico"
-            ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/@fullcalendar/core/main.min.css",
-              "node_modules/@fullcalendar/daygrid/main.min.css",
-              "node_modules/@fullcalendar/timegrid/main.min.css",
-              "node_modules/quill/dist/quill.snow.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeicons/primeicons.css",
-              "src/assets/demo/css/codehighlight.css",
-              "src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/chart.js/dist/Chart.js",
-              "node_modules/@fullcalendar/core/main.js",
-              "node_modules/@fullcalendar/daygrid/main.js",
-              "node_modules/@fullcalendar/timegrid/main.js",
-              "node_modules/@fullcalendar/interaction/main.js",
-              "node_modules/quill/dist/quill.js",
-              "node_modules/prismjs/prism.js"
-            ]
+      "apollo": {
+          "root": "",
+          "schematics": {
+              "@schematics/angular:component": {
+                  "style": "scss"
+              }
           },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
+          "sourceRoot": "src",
+          "projectType": "application",
+          "prefix": "app",
+          "architect": {
+              "build": {
+                  "builder": "@angular-devkit/build-angular:browser",
+                  "options": {
+                      "outputPath": "dist",
+                      "index": "src/index.html",
+                      "main": "src/main.ts",
+                      "polyfills": "src/polyfills.ts",
+                      "tsConfig": "tsconfig.app.json",
+                      "aot": false,
+                      "assets": [
+                          "src/assets",
+                          "src/upload.php",
+                          "src/favicon.ico"
+                      ],
+                      "styles": [
+                          "src/styles.scss"
+                      ],
+                      "scripts": [
+                          "node_modules/prismjs/prism.js",
+                          "node_modules/prismjs/components/prism-typescript.js"
+                      ],
+                      "allowedCommonJsDependencies": ["@fullcalendar/daygrid","@fullcalendar/timegrid","@fullcalendar/interaction","chart.js"]
+                  },
+                  "configurations": {
+                      "production": {
+                          "optimization": true,
+                          "outputHashing": "all",
+                          "sourceMap": false,
+                          "extractCss": true,
+                          "namedChunks": false,
+                          "aot": true,
+                          "extractLicenses": true,
+                          "vendorChunk": false,
+                          "buildOptimizer": true,
+                          "fileReplacements": [
+                              {
+                                  "replace": "src/environments/environment.ts",
+                                  "with": "src/environments/environment.prod.ts"
+                              }
+                          ],
+                          "budgets": [
+                              {
+                                  "type": "initial",
+                                  "maximumWarning": "2mb",
+                                  "maximumError": "5mb"
+                              },
+                              {
+                                  "type": "anyComponentStyle",
+                                  "maximumWarning": "6kb",
+                                  "maximumError": "10kb"
+                              }
+                          ]
+                      }
+                  }
+              },
+              "serve": {
+                  "builder": "@angular-devkit/build-angular:dev-server",
+                  "options": {
+                      "browserTarget": "apollo:build"
+                  },
+                  "configurations": {
+                      "production": {
+                          "browserTarget": "apollo:build:production"
+                      }
+                  }
+              },
+              "extract-i18n": {
+                  "builder": "@angular-devkit/build-angular:extract-i18n",
+                  "options": {
+                      "browserTarget": "apollo:build"
+                  }
+              },
+              "test": {
+                  "builder": "@angular-devkit/build-angular:karma",
+                  "options": {
+                      "main": "src/test.ts",
+                      "polyfills": "src/polyfills.ts",
+                      "tsConfig": "tsconfig.spec.json",
+                      "karmaConfig": "karma.conf.js",
+                      "scripts": [],
+                      "styles": [
+                          "src/styles.scss"
+                      ],
+                      "assets": [
+                          "src/assets",
+                          "src/upload.php",
+                          "src/favicon.ico"
+                      ]
+                  }
+              },
+              "lint": {
+                  "builder": "@angular-devkit/build-angular:tslint",
+                  "options": {
+                      "tsConfig": [
+                          "tsconfig.app.json",
+                          "tsconfig.spec.json",
+                          "e2e/tsconfig.json"
+                      ],
+                      "exclude": [
+                          "**/node_modules/**"
+                      ]
+                  }
+              },
+              "e2e": {
+                  "builder": "@angular-devkit/build-angular:protractor",
+                  "options": {
+                      "protractorConfig": "e2e/protractor.conf.js",
+                      "devServerTarget": "apollo:serve"
+                  },
+                  "configurations": {
+                      "production": {
+                          "devServerTarget": "apollo:serve:production"
+                      }
+                  }
+              }
           }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "apollo:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "apollo:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "apollo:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "scripts": [
-              "node_modules/chart.js/dist/Chart.js",
-              "node_modules/@fullcalendar/core/main.js",
-              "node_modules/@fullcalendar/daygrid/main.js",
-              "node_modules/@fullcalendar/timegrid/main.js",
-              "node_modules/@fullcalendar/interaction/main.js",
-              "node_modules/prismjs/prism.js",
-              "node_modules/quill/dist/quill.js"
-            ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/@fullcalendar/core/main.min.css",
-              "node_modules/@fullcalendar/daygrid/main.min.css",
-              "node_modules/@fullcalendar/timegrid/main.min.css",
-              "node_modules/quill/dist/quill.snow.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "src/assets/demo/css/codehighlight.css",
-              "src/styles.scss"
-            ],
-            "assets": [
-              "src/assets",
-              "src/upload.php",
-              "src/favicon.ico"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "apollo:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "apollo:serve:production"
-            }
-          }
-        }
       }
-    }
   },
   "defaultProject": "apollo"
 }

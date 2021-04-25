@@ -20,5 +20,4 @@ export class ClienteModel {
   facturas: Array<Factura> = [];
   contactos: Array<Contacto> = [];
   enfermedades: Array<String> = [];
-
 }

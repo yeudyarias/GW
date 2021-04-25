@@ -1,0 +1,198 @@
+<!-- <detalle-usuario *ngIf="usuarioSeleccionado" [usuario] ="usuarioSeleccionado"></detalle-usuario> -->
+
+<div class="card border-primary mb-3">
+  <div class="card-body text-primary">
+    <p-messages [value]="msgs" class="col-6 align-self-center" [closable]="true" [showTransitionOptions]="'10ms'"
+      [hideTransitionOptions]="'0ms'"></p-messages>
+    <h5 class="card-title">Administrar Usuarios</h5>
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"
+          *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Importar"
+          class="p-mr-2 p-d-inline-block"></p-fileUpload>
+        <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button>
+      </ng-template>
+    </p-toolbar>
+
+    <div *ngIf="usuarios?.length == 0" class="alert alert-info">
+      No hay registros en la base de datos!
+    </div>
+    <p-table #dt [value]="usuarios" dataKey="id" [showCurrentPageReport]="true" [rows]="10"
+      [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-customers" [rowHover]="true"
+      [paginator]="true" (onLazyLoad)="loadCarsLazyT($event)" [filterDelay]="0"
+      [globalFilterFields]="['id','nombre','apellido']">
+
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-m-0">Listado Usuarios</h5>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar..." />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th style="width: 5%;">Id</th>
+          <th style="width: 15%;">Nombre</th>
+          <th style="width: 15%;">Apellido</th>
+          <th style="width: 25%;">Correo</th>
+          <th style="width: 20%;">Fecha Actualizacion</th>
+          <th style="width: 15%;" *ngIf="authService.hasRole('ROLE_ADMIN')"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td>
+            <img [src]="rowData.fotoLista" [alt]="rowData?.foto" class="img imgRedondaPerfil" *ngIf="rowData?.foto"
+              style="width:40px; height: 40px;">
+
+            <img (click)="abrirModal(usuario)" *ngIf="!rowData?.foto" src="http://localhost:8080/images/no-usuario.png"
+              alt="Sin foto" class="imgRedondaLista" style="width:40px; height: 40px; cursor: pointer;">
+          </td>
+          <td>{{rowData.id}}</td>
+          <td>{{rowData.nombre}}</td>
+          <td>{{rowData.apellido}}</td>
+          <td>{{rowData.email}}</td>
+          <td>{{rowData.createAt | date:"dd/MM/yyyy"}}</td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+              (click)="editarUsuario(rowData)" *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+              (click)="eliminarUsuario(rowData)" *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          Existen en total {{usuarios ? usuarios.length : 0 }} usuarios.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-dialog [(visible)]="usuarioDialog" [style]="{width: '650px'}" header="Detalle del Usuario" [modal]="true"
+    styleClass="p-fluid" [maximizable]="true" [baseZIndex]="10000"
+    [draggable]="true" [resizable]="true">
+    <p-messages [value]="msgs2" class="col-6 align-self-center" [closable]="true" [showTransitionOptions]="'10ms'"
+      [hideTransitionOptions]="'0ms'"></p-messages>
+    <ng-template pTemplate="content" style="height: 700px !important;">
+
+      <img [src]="retrievedImage" [alt]="usuarioSeleccionado.foto" class="img imgRedondaPerfil"
+        *ngIf="usuarioSeleccionado.foto" style="width:50px; height: 50px; margin-left: 45%;">
+      <div style="margin-left: 40%; margin-bottom: 20px;">
+        <p-fileUpload mode="basic" name="myfile[]" chooseLabel="Subir Foto" customUpload="true" multiple="multiple"
+          (uploadHandler)="subirFoto($event)" accept="image/*"></p-fileUpload>
+      </div>
+
+
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="nombre">Nombre</label>
+          <input type="text" pInputText id="nombre" [(ngModel)]="usuarioSeleccionado.nombre" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.nombre">Nombre es requerido.</small>
+        </div>
+        <div class="p-field p-col">
+          <label for="apellido">Apellidos</label>
+          <input type="text" pInputText id="apellido" [(ngModel)]="usuarioSeleccionado.apellido" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.apellido">Apellido es requerido.</small>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="email">Correo</label>
+          <input type="text" pInputText id="email" [(ngModel)]="usuarioSeleccionado.email" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.email">Correo es requerido.</small>
+        </div>
+        <div class="p-field p-col">
+          <label for="email">Roles</label>
+          <span class="p-float-label">
+            <p-multiSelect inputId="multiselect" [options]="roles" [(ngModel)]="rolesSelected" optionLabel="nombre"
+              [filter]="false"></p-multiSelect>
+            <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.email">Debe seleccionar al menos un
+              role.</small>
+          </span>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="usuario">Usuario</label>
+          <input type="text" pInputText id="usuario" [(ngModel)]="usuarioSeleccionado.username" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.username">Usuario es requerido.</small>
+        </div>
+
+        <div class="p-field p-col">
+          <label>Contraseña</label>          
+          <input type="password" [(ngModel)]="usuarioSeleccionado.password" required autofocus promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Contraseña Actual" [disabled]="usuarioSeleccionado.id" pPassword/>
+          <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.password">Contraseña es requerida.</small>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">        
+        <div class="p-field p-col" style="margin-top: 30px; margin-top: 30px;">   
+          Habilitado                
+          <p-inputSwitch id="habilitado" [(ngModel)]="usuarioSeleccionado.enabled"></p-inputSwitch>
+        </div>
+      </div>
+      <p-accordion *ngIf="usuarioSeleccionado.id">
+        <p-accordionTab header="Cambiar Contrasena" >
+          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Contraseña Actual" pPassword showPassword="false"/>
+          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Nueva Contraseña" pPassword />
+          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Repetir Contraseña" pPassword />
+        </p-accordionTab>
+      </p-accordion>
+
+
+      <!-- <div class="p-field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="usuarioSeleccionado.description" required rows="3" cols="20"></textarea>
+        </div>
+
+        <div class="p-field">
+            <label class="p-mb-3">Category</label>
+            <div class="p-formgrid p-grid">
+                <div class="p-field-radiobutton p-col-6">
+                    <p-radioButton id="category1" name="category" value="Accessories" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
+                    <label for="category1">Accessories</label>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <p-radioButton id="category2" name="category" value="Clothing" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
+                    <label for="category2">Clothing</label>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <p-radioButton id="category3" name="category" value="Electronics" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
+                    <label for="category3">Electronics</label>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <p-radioButton id="category4" name="category" value="Fitness" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
+                    <label for="category4">Fitness</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-formgrid p-grid">
+            <div class="p-field p-col">
+                <label for="price">Price</label>
+                <p-inputNumber id="price" [(ngModel)]="usuarioSeleccionado.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+            </div>
+            <div class="p-field p-col">
+                <label for="quantity">Quantity</label>
+                <p-inputNumber id="quantity" [(ngModel)]="usuarioSeleccionado.quantity"></p-inputNumber>
+            </div>
+        </div> -->
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"
+        (click)="salvarUsuario()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</div>

@@ -5,17 +5,15 @@ import {
 
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/primeng';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-msgs: Message[] = [];
-
   constructor(private authService: AuthService,
-    private router: Router) { }
+    private router: Router, private messageService: MessageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
@@ -32,9 +30,8 @@ msgs: Message[] = [];
         }
 
         if (e.status == 403) {
-          this.msgs = [];
-          this.msgs.push({severity:'warning', summary:'Acceso denegado', detail:`Hola ${this.authService.usuario.username} no tienes acceso a este recurso!`});
-          this.router.navigate(['/lista-usuario-clinico']);
+          this.messageService.add({severity:'warn', summary: 'Acceso denegado', detail: `Hola ${this.authService.usuario.username} no tienes acceso a este recurso!`});                      
+          this.router.navigate(['/paises']);
         }
         return throwError(e);
       })

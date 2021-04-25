@@ -1,160 +1,158 @@
 <div class="topbar clearfix">
-
-    <img class="logo" routerLink="/" style="outline: none; cursor: pointer;" alt="apollo-layout" src="assets/layout/images/apollo_logo.png" />
-
-    <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)">
-        <i class="fa fa-align-left"></i>
+    <a href="#" class="topbar-logo">
+        <img class="logo" routerLink="/" style="outline: none; cursor: pointer;" alt="apollo-layout" src="assets/layout/images/apollo_logo.png" />
     </a>
 
-    <a href="#" class="profile" (click)="app.onTopbarMenuButtonClick($event)">
-        <span class="username">Sarah Miller</span>
-        <img src="assets/layout/images/avatar/avatar.png" alt="apollo-layout" />
-        <i class="fa fa-angle-down"></i>
+    <a id="menu-button" href="#" (click)="appMain.onMenuButtonClick($event)">
+        <i class="pi pi-align-left"></i>
+    </a>
+
+    <a href="#" class="profile" (click)="appMain.onTopbarMenuButtonClick($event)">
+        <span class="username">{{authService.usuario.username}}</span>
+        <img src="{{fotoPerfil2}}" alt="No Perfil" style="width:30px; height: 30px;" *ngIf="!authService.usuario.foto"/>        
+        <img [src]="authService.usuario.fotoLista" class="img imgRedondaPerfil" *ngIf="authService.usuario.foto" style="width:30px; height: 30px;"> 
+        <i class="profile-submenu-icon pi pi-angle-down"></i>
     </a>
 
     <span class="topbar-search">
-        <input type="text" pInputText placeholder="Search"/>
-        <span class="fa fa-search"></span>
+        <input type="text" pInputText placeholder="Buscar"/>
+        <span class="topbar-search-icon pi pi-search"></span>
     </span>
 
-    <span class="topbar-themeswitcher">
-        <p-inputSwitch [(ngModel)]="app.darkTheme" (onChange)="app.changeTheme(app.selectedColor)"></p-inputSwitch>
-    </span>
-
-    <ul class="topbar-menu fadeInDown" [ngClass]="{'topbar-menu-visible': app.topbarMenuActive}">
-        <li #profile [ngClass]="{'menuitem-active':app.activeTopbarItem === profile}">
-            <a href="#" (click)="app.onTopbarItemClick($event, profile)">
-                <i class="topbar-icon fa fa-fw fa-user"></i>
-                <span class="topbar-item-name">Profile</span>
+    <ul class="topbar-menu fadeInDown" [ngClass]="{'topbar-menu-visible': appMain.topbarMenuActive}">
+        <li #profile [ngClass]="{'menuitem-active':appMain.activeTopbarItem === profile}">
+            <a href="#" (click)="appMain.onTopbarItemClick($event, profile)">
+                <i class="topbar-icon pi pi-fw pi-user"></i>
+                <span class="topbar-item-name">Perfil</span>
             </a>
             <ul>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                        <i class="fa fa-fw fa-user"></i>
-                        <span>Profile</span>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                        <i class="pi pi-fw pi-user-edit"></i>
+                        <span>Cuenta</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                        <i class="fa fa-fw fa-user-secret"></i>
-                        <span>Privacy</span>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                        <i class="pi pi-fw pi-eye"></i>
+                        <span>Privacidad</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                        <i class="fa fa-fw fa-cog"></i>
-                        <span>Settings</span>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                        <i class="pi pi-fw pi-cog"></i>
+                        <span>Configuracion</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-sign-out"></i>
-                      <span>Logout</span>
+                    <a (click)="logout()">
+                      <i class="pi pi-fw pi-sign-out"></i>
+                      <span>Salir</span>
                     </a>
                 </li>
             </ul>
         </li>
-        <li #settings [ngClass]="{'menuitem-active':app.activeTopbarItem === settings}">
-            <a href="#" (click)="app.onTopbarItemClick($event, settings)">
-                <i class="topbar-icon fa fa-fw fa-cog"></i>
-                <span class="topbar-item-name">Settings</span>
+        <li #settings [ngClass]="{'menuitem-active':appMain.activeTopbarItem === settings}">
+            <a href="#" (click)="appMain.onTopbarItemClick($event, settings)">
+                <i class="topbar-icon pi pi-fw pi-cog"></i>
+                <span class="topbar-item-name">Configuraciones</span>
             </a>
             <ul>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-paint-brush"></i>
-                      <span>Change Theme</span>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-palette"></i>
+                      <span>Cambiar tema</span>
                       <span class="topbar-badge">1</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-star-o"></i>
-                      <span>Favorites</span>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-bookmark"></i>
+                      <span>Favoritos</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                        <i class="fa fa-fw fa-lock"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                        <i class="pi pi-fw pi-lock"></i>
                         <span>Lock Screen</span>
                         <span class="topbar-badge">3</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-picture-o"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-image"></i>
                       <span>Wallpaper</span>
                     </a>
                 </li>
           </ul>
         </li>
-        <li #messages [ngClass]="{'menuitem-active':app.activeTopbarItem === messages}">
-            <a href="#" (click)="app.onTopbarItemClick($event, messages)">
-                <i class="topbar-icon fa fa-fw fa-envelope-o"></i>
+        <li #messages [ngClass]="{'menuitem-active':appMain.activeTopbarItem === messages}">
+            <a href="#" (click)="appMain.onTopbarItemClick($event, messages)">
+                <i class="topbar-icon pi pi-fw pi-envelope"></i>
                 <span class="topbar-item-name">Messages</span>
                 <span class="topbar-badge">5</span>
             </a>
             <ul>
                 <li role="menuitem">
-                  <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
+                  <a href="#" class="topbar-message" (click)="appMain.onTopbarSubItemClick($event)">
                     <img src="assets/layout/images/avatar/avatar1.png" alt="avatar1" style="width: 35px;"/>
                     <span>Give me a call</span>
                   </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
+                    <a href="#" class="topbar-message" (click)="appMain.onTopbarSubItemClick($event)">
                       <img src="assets/layout/images/avatar/avatar2.png" alt="avatar2" style="width: 35px;"/>
                       <span>Reports attached</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
+                    <a href="#" class="topbar-message" (click)="appMain.onTopbarSubItemClick($event)">
                       <img src="assets/layout/images/avatar/avatar3.png" alt="avatar3" style="width: 35px;"/>
                       <span>About your invoice</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
+                    <a href="#" class="topbar-message" (click)="appMain.onTopbarSubItemClick($event)">
                       <img src="assets/layout/images/avatar/avatar2.png" alt="avatar2" style="width: 35px;"/>
                       <span>Meeting today</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" class="topbar-message" (click)="app.onTopbarSubItemClick($event)">
+                    <a href="#" class="topbar-message" (click)="appMain.onTopbarSubItemClick($event)">
                       <img src="assets/layout/images/avatar/avatar4.png" alt="avatar4" style="width: 35px;"/>
                       <span>Out of office</span>
                     </a>
                 </li>
             </ul>
         </li>
-        <li #notifications [ngClass]="{'menuitem-active':app.activeTopbarItem === notifications}">
-            <a href="#" (click)="app.onTopbarItemClick($event, notifications)">
-                <i class="topbar-icon fa fa-fw fa-bell-o"></i>
+        <li #notifications [ngClass]="{'menuitem-active':appMain.activeTopbarItem === notifications}">
+            <a href="#" (click)="appMain.onTopbarItemClick($event, notifications)">
+                <i class="topbar-icon pi pi-fw pi-bell"></i>
                 <span class="topbar-item-name">Notifications</span>
                 <span class="topbar-badge">2</span>
             </a>
             <ul>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-tasks"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-list"></i>
                       <span>Pending tasks</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-calendar-check-o"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-calendar"></i>
                       <span>Meeting today</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-download"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-download"></i>
                       <span>Download</span>
                     </a>
                 </li>
                 <li role="menuitem">
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
-                      <i class="fa fa-fw fa-plane"></i>
+                    <a href="#" (click)="appMain.onTopbarSubItemClick($event)">
+                      <i class="pi pi-fw pi-ticket"></i>
                       <span>Book flight</span>
                     </a>
                 </li>
