@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {MenuService} from './app.menu.service';
 import {AppMainComponent} from './app.main.component';
+import { AuthService } from './usuarios/auth.service';
 
 @Component({
     /* tslint:disable:component-selector */
@@ -12,21 +13,21 @@ import {AppMainComponent} from './app.main.component';
     /* tslint:enable:component-selector */
     template: `
         <ng-container>
-            <div *ngIf="root" class="layout-menuitem-root-text">{{item.label}}</div>
-            <a [attr.href]="item.url" (click)="itemClick($event)" *ngIf="!item.routerLink || item.items" (mouseenter)="onMouseEnter()"
+            <div *ngIf="authService.hasRole(item.role) && root"  class="layout-menuitem-root-text">{{item.label}}</div>
+            <a [attr.href]="item.url"  (click)="itemClick($event)" *ngIf="authService.hasRole(item.role) && (!item.routerLink || item.items)" (mouseenter)="onMouseEnter()"
                (keydown.enter)="itemClick($event)" [attr.target]="item.target" [attr.tabindex]="0" [ngClass]="item.class" pRipple>
                 <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
                 <span>{{item.label}}</span>
-                <i class="pi pi-fw pi-angle-down layout-menuitem-toggler" *ngIf="item.items"></i>
-                <span class="menuitem-badge" *ngIf="item.badge">{{item.badge}}</span>
+                <i class="pi pi-fw pi-angle-down layout-menuitem-toggler" *ngIf="item.items && authService.hasRole(item.role)"></i>
+                <span class="menuitem-badge" *ngIf="item.badge && authService.hasRole(item.role)">{{item.badge}}</span>
             </a>
-            <a (click)="itemClick($event)" (mouseenter)="onMouseEnter()" *ngIf="item.routerLink && !item.items"
+            <a (click)="itemClick($event)" (mouseenter)="onMouseEnter()" *ngIf="authService.hasRole(item.role) && item.routerLink && !item.items && authService.hasRole(item.role)"
                [routerLink]="item.routerLink" routerLinkActive="active-menuitem-routerlink"
                [routerLinkActiveOptions]="{exact: true}" [attr.target]="item.target" [attr.tabindex]="0" [ngClass]="item.class" pRipple>
                 <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
                 <span>{{item.label}}</span>
-                <i class="pi pi-fw pi-angle-down" *ngIf="item.items"></i>
-                <span class="menuitem-badge" *ngIf="item.badge">{{item.badge}}</span>
+                <i class="pi pi-fw pi-angle-down" *ngIf="item.items && authService.hasRole(item.role)"></i>
+                <span class="menuitem-badge" *ngIf="item.badge && authService.hasRole(item.role)">{{item.badge}}</span>
             </a>
             <ul *ngIf="(item.items && root) || (item.items && active)" [@children]="(root ? 'visible' : active ? 'visibleAnimated' : 'hiddenAnimated')">
                 <ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
@@ -83,7 +84,8 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     key: string;
 
-    constructor(public appMain: AppMainComponent, public router: Router, private menuService: MenuService) {
+    constructor(public appMain: AppMainComponent, public router: Router, 
+        private authService: AuthService, private menuService: MenuService) {
         this.menuSourceSubscription = this.menuService.menuSource$.subscribe(key => {
             // deactivate current active menu
             if (this.active && this.key !== key && key.indexOf(this.key) !== 0) {

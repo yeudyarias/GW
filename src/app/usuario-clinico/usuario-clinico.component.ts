@@ -33,7 +33,7 @@ export class ClientesComponent implements OnInit {
     private modalService: ModalService,
     private breadcrumbService: AppBreadcrumbService) {
     this.breadcrumbService.setItems([
-        { label: 'Lista Pacientes', routerLink: ['/lista-pacientes'] }
+        { label: 'Lista Empleados', routerLink: ['/lista-empleados'] }
     ]);
   }
 

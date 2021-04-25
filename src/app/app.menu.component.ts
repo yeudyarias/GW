@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
+import { AuthService } from './usuarios/auth.service';
 
 @Component({
     selector: 'app-menu',
     template: `
         <ul class="layout-menu">
-            <li app-menuitem *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true"></li>
+            <li app-menuitem *ngFor="let item of model; let i = index;"  [item]="item" [index]="i" [root]="true"></li>
         </ul>
     `
 })
@@ -12,67 +13,59 @@ export class AppMenuComponent implements OnInit {
 
     model: any[];
 
+    constructor(private authService: AuthService) {        
+      }
+
     ngOnInit() {
         this.model = [
             {
-                label: 'Favorites', icon: 'pi pi-fw pi-home',
+                label: 'Favoritos', icon: 'pi pi-fw pi-home',
                 items: [
                     {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']}
                 ]
             },           
-            {                
+            {   label: 'Administracion', icon: 'pi pi-fw pi-desktop', role: 'ROLE_ADMIN',
                 items: [
                     {
-                        label: 'Administracion', icon: 'pi pi-fw pi-align-left',
+                        label: 'Administracion', icon: 'pi pi-fw pi-desktop', role: 'ROLE_ADMIN',
                         items: [
                             {
-                                label: 'Submenu 1.1', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-align-left'},
-                                    {label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-align-left'},
-                                    {label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-align-left'},
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-align-left'}
-                                ]
-                            },
+                                label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/usuarios'], role: 'ROLE_ADMIN',                               
+                            },                            
                         ]
                     },
                     {
-                        label: 'Mantenimiento', icon: 'pi pi-fw pi-align-left',
+                        label: 'Mantenimiento', icon: 'pi pi-fw pi-cog', role: 'ROLE_USER',
                         items: [
                             {
-                                label: 'Pais', icon: 'pi pi-fw pi-align-left', routerLink: ['/paises'],                              
+                                label: 'Pais', icon: 'pi pi-fw pi-globe', routerLink: ['/paises'],  role: 'ROLE_USER',                             
                             },
                             {
-                                label: 'Marca', icon: 'pi pi-fw pi-align-left', routerLink: ['/marcas'],                               
+                                label: 'Marca', icon: 'pi pi-fw pi-bookmark', routerLink: ['/marcas'],  role: 'ROLE_USER',                              
                             },
                         ]
                     }
                 ]
             },
             {
-                label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],
+                label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'], role: 'ROLE_ADMIN',
                 items: [
-                    {label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout']},
-                    {label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input']},
-                    {label: 'Float Label', icon: 'pi pi-bookmark', routerLink: ['/uikit/floatlabel']},
-                    {label: 'Invalid State', icon: 'pi pi-exclamation-circle', routerLink: ['/uikit/invalidstate']},
-                    {label: 'Button', icon: 'pi pi-fw pi-mobile', routerLink: ['/uikit/button'], class: 'rotated-icon'},
-                    {label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table']},
-                    {label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list']},
-                    {label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree']},
-                    {label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel']},
-                    {label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay']},
-                    {label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media']},
-                    {label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu']},
-                    {label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message']},
-                    {label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file']},
-                    {label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts']},
-                    {label: 'Misc', icon: 'pi pi-fw pi-circle-off', routerLink: ['/uikit/misc']}
+                    {label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'],role: 'ROLE_ADMIN'},
+                    {label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'],role: 'ROLE_ADMIN'},
+                    {label: 'Float Label', icon: 'pi pi-bookmark', routerLink: ['/uikit/floatlabel'],role: 'ROLE_ADMIN'},
+                    {label: 'Invalid State', icon: 'pi pi-exclamation-circle', routerLink: ['/uikit/invalidstate'],role: 'ROLE_ADMIN'},
+                    {label: 'Button', icon: 'pi pi-fw pi-mobile', routerLink: ['/uikit/button'], class: 'rotated-icon',role: 'ROLE_ADMIN'},
+                    {label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'],role: 'ROLE_ADMIN'},
+                    {label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'],role: 'ROLE_ADMIN'},
+                    {label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'],role: 'ROLE_ADMIN'},
+                    {label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'],role: 'ROLE_ADMIN'},
+                    {label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'],role: 'ROLE_ADMIN'},
+                    {label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'],role: 'ROLE_ADMIN'},
+                    {label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'],role: 'ROLE_ADMIN'},
+                    {label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'],role: 'ROLE_ADMIN'},
+                    {label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'],role: 'ROLE_ADMIN'},
+                    {label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'],role: 'ROLE_ADMIN'},
+                    {label: 'Misc', icon: 'pi pi-fw pi-circle-off', routerLink: ['/uikit/misc'],role: 'ROLE_ADMIN'}
                 ]
             },
             {

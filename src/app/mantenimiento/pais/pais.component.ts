@@ -63,8 +63,7 @@ export class PaisComponent implements OnInit {
   private getPaises(page: number) {
     this.paisService.getPaises(page)
       .pipe(
-        tap(response => {
-          console.log('PaisesComponent: tap 3');
+        tap(response => {          
           (response.content as Pais[]).forEach(cliente => console.log(cliente.nombre));
         })
       ).subscribe(response => {
@@ -93,7 +92,7 @@ export class PaisComponent implements OnInit {
   guardarPais(table): void {
     this.msgs = [];
     if (this.validarPaises()) {
-      this.msgs.push({ severity: 'error', summary: 'Pais Duplicado', detail: 'Pais ' + this.selectedPais.nombre + ' ya existe' });
+      this.messageService.add({ severity: 'error', summary: 'Pais Duplicado', detail: 'Pais ' + this.selectedPais.nombre + ' ya existe' });
       return;
     }
     if (this.selectedPais.idPais != null) {
@@ -106,8 +105,7 @@ export class PaisComponent implements OnInit {
     this.limpiar();
     table.reset();
   }
-  createPais(): void {
-    console.log(this.selectedPais);
+  createPais(): void {    
     this.paisService.create(this.selectedPais)
       .subscribe(
         pais => {
@@ -121,15 +119,12 @@ export class PaisComponent implements OnInit {
           } else {
             this.getErrores();
           }
-          window.scroll(0, 0);
-          console.error('Código del error desde el backend: ' + err.status);
-          console.error(err.error.errors);
+          window.scroll(0, 0);          
         }
       );
   }
 
-  updatePais(): void {
-    console.log(this.selectedPais);
+  updatePais(): void {    
     this.msgs = [];
     this.paisService.update(this.selectedPais)
       .subscribe(
@@ -145,8 +140,6 @@ export class PaisComponent implements OnInit {
             this.getErrores();
           }
           window.scroll(0, 0);
-          console.error('Código del error desde el backend: ' + err.status);
-          console.error(err.error.errors);
         }
       )
   }
@@ -173,7 +166,6 @@ export class PaisComponent implements OnInit {
     this.msgs = [];
     this.paisModel = new Pais
     this.selectedPais = new Pais();
-    console.log(this.paisModel);
   }
 
   getErrores(): void {

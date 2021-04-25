@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
@@ -150,6 +150,10 @@ import { LoginComponent } from './usuarios/login.component';
 import { ClientesComponent } from './usuario-clinico/usuario-clinico.component';
 import { ClienteService } from './usuario-clinico/usuario-clinico.service';
 import { CRUDClientesComponent } from './usuario-clinico/crud-usuario-clinico.component';
+import { UsuarioService } from './usuarios/listado/usuario.service';
+import { UsuariosComponent } from './usuarios/listado/usuarios.component';
+import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
+import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 
 
 @NgModule({
@@ -291,11 +295,15 @@ import { CRUDClientesComponent } from './usuario-clinico/crud-usuario-clinico.co
         LoginComponent,
         ClientesComponent,
         CRUDClientesComponent,
+        UsuariosComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
+        {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi : true},
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi : true},
+        {provide: LOCALE_ID, useValue : 'es'},
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, PaisService, MarcaService, ConfirmationService,MessageService,ClienteService
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, PaisService, MarcaService, ConfirmationService,MessageService,ClienteService, UsuarioService
     ],
     bootstrap: [AppComponent]
 })

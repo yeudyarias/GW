@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/api';
+import { Role } from '../role';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleGuard implements CanActivate {
 
-msgs: Message[] = [];
-
   constructor(private authService: AuthService,
-    private router: Router) { }
+    private router: Router, private messageService: MessageService) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -23,15 +22,12 @@ msgs: Message[] = [];
       return false;
     }
 
-    let role = next.data['role'] as string;
+    let role = next.data['role'] as Role;
     console.log(role);
     if (this.authService.hasRole(role)) {
       return true;
     }
-    this.msgs = [];
-    this.msgs.push({severity:'warning', summary:'Acceso denegado', detail:`Hola ${this.authService.usuario.username} no tienes acceso a este recurso!`});
-
-    this.router.navigate(['/lista-pacientes']);
+    this.messageService.add({severity:'warn', summary: 'Acceso Denegado', detail: `Hola ${this.authService.usuario.username} no tienes acceso a la pantalla de ` + state.url.toUpperCase().substring(1)});                
     return false;
   }
 }

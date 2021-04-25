@@ -45,6 +45,11 @@ import { RoleGuard } from './usuarios/guards/role.guard';
 import { LoginComponent } from './usuarios/login.component';
 import { PaisComponent } from './mantenimiento/pais/pais.component';
 import { MarcaComponent } from './mantenimiento/marca/marca.component';
+import { UsuariosComponent } from './usuarios/listado/usuarios.component';
+import localeES from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeES, 'es');
 
 @NgModule({
     imports: [
@@ -86,11 +91,11 @@ import { MarcaComponent } from './mantenimiento/marca/marca.component';
                     {path: 'pages/empty', component: EmptyDemoComponent},
                     {path: 'documentation', component: DocumentationComponent},
                     { path: 'lista-pacientes', component: ClientesComponent },
+                    { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
                     { path: 'administrar-pacientes', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
-                    { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
-                    
-                    { path: 'paises', component: PaisComponent },
-                    { path: 'marcas', component: MarcaComponent }
+                    { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },                    
+                    { path: 'paises', component: PaisComponent , canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_USER' } },
+                    { path: 'marcas', component: MarcaComponent , canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_USER' } }
                 ]
             },
             {path: 'error', component: AppErrorComponent},
