@@ -82,6 +82,9 @@ export class UsuariosComponent implements OnInit {
           this.paginador = response;
         });
     });    
+    this.oldPassword = false;
+    this.confirmNewPassword = false;
+    this.newPassword = false;
   }
 
   abrirModal(usuario: Usuario) {
@@ -258,13 +261,16 @@ export class UsuariosComponent implements OnInit {
 
   showOldPassword() {
     this.oldPassword = !this.oldPassword;
+    console.log("1: "+this.oldPassword.valueOf);
   }
 
   showNewPassword() {
     this.newPassword = !this.newPassword;
+    console.log("2: "+this.newPassword.valueOf);
   }
 
   showNewConfirmPassword() {
     this.confirmNewPassword = !this.confirmNewPassword;
+    console.log("3: "+this.confirmNewPassword.valueOf);
   }
 }

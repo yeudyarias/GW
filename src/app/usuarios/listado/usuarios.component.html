@@ -78,8 +78,7 @@
     </p-table>
   </div>
   <p-dialog [(visible)]="usuarioDialog" [style]="{width: '650px'}" header="Detalle del Usuario" [modal]="true"
-    styleClass="p-fluid" [maximizable]="true" [baseZIndex]="10000"
-    [draggable]="true" [resizable]="true">
+    styleClass="p-fluid" [maximizable]="true" [baseZIndex]="10000" [draggable]="true" [resizable]="true">
     <p-messages [value]="msgs2" class="col-6 align-self-center" [closable]="true" [showTransitionOptions]="'10ms'"
       [hideTransitionOptions]="'0ms'"></p-messages>
     <ng-template pTemplate="content" style="height: 700px !important;">
@@ -128,22 +127,40 @@
         </div>
 
         <div class="p-field p-col">
-          <label>Contraseña</label>          
-          <input type="password" [(ngModel)]="usuarioSeleccionado.password" required autofocus promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Contraseña Actual" [disabled]="usuarioSeleccionado.id" pPassword/>
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="usuarioSeleccionado.password" required autofocus
+            promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte"
+            placeholder="Contraseña Actual" [disabled]="usuarioSeleccionado.id" pPassword />
           <small class="p-invalid" *ngIf="submitted && !usuarioSeleccionado.password">Contraseña es requerida.</small>
         </div>
       </div>
-      <div class="p-fluid p-formgrid p-grid">        
-        <div class="p-field p-col" style="margin-top: 30px; margin-top: 30px;">   
-          Habilitado                
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col" style="margin-top: 30px; margin-top: 30px;">
+          Habilitado
           <p-inputSwitch id="habilitado" [(ngModel)]="usuarioSeleccionado.enabled"></p-inputSwitch>
         </div>
       </div>
       <p-accordion *ngIf="usuarioSeleccionado.id">
-        <p-accordionTab header="Cambiar Contrasena" >
-          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Contraseña Actual" pPassword showPassword="false"/>
-          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Nueva Contraseña" pPassword />
-          <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio" strongLabel="Fuerte" placeholder="Repetir Contraseña" pPassword />
+        <p-accordionTab header="Cambiar Contrasena">
+          <div class="p-inputgroup" style="margin-bottom: 5px;">
+            <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio"
+              strongLabel="Fuerte" placeholder="Contraseña Actual" pPassword [showPassword]="oldPassword" />
+            <button *ngIf="oldPassword" type="button" pButton pRipple icon="pi pi-eye" styleClass="p-button-danger" (click)="showOldPassword()"></button>
+            <button *ngIf="!oldPassword" type="button" pButton pRipple icon="pi pi-eye-slash" styleClass="p-button-danger" (click)="showOldPassword()"></button>
+          </div>
+          <div class="p-inputgroup" style="margin-bottom: 5px;">
+            <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio"
+              strongLabel="Fuerte" placeholder="Nueva Contraseña" pPassword [showPassword]="newPassword"/>
+            <button *ngIf="newPassword" type="button" pButton pRipple icon="pi pi-eye" styleClass="p-button-danger" (click)="showNewPassword()"></button>
+            <button *ngIf="!newPassword" type="button" pButton pRipple icon="pi pi-eye-slash" styleClass="p-button-danger" (click)="showNewPassword()"></button>
+          </div>
+          <div class="p-inputgroup">
+            <input type="password" promptLabel="Ingrese la contraseña" weakLabel="Debil" mediumLabel="Medio"
+              strongLabel="Fuerte" placeholder="Repetir Contraseña" pPassword [showPassword]="confirmNewPassword"/>
+            <button *ngIf="confirmNewPassword" type="button" pButton pRipple icon="pi pi-eye" styleClass="p-button-danger" (click)="showNewConfirmPassword()"></button>
+            <button *ngIf="!confirmNewPassword" type="button" pButton pRipple icon="pi pi-eye-slash" styleClass="p-button-danger" (click)="showNewConfirmPassword()"></button>
+          </div>
+
         </p-accordionTab>
       </p-accordion>
 
