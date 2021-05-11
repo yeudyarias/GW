@@ -5,13 +5,13 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
 import { Router } from '@angular/router';
-import { Usuario } from '../usuario';
 import { MessageService } from 'primeng/api';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Empleado } from 'src/app/models/empleado';
 
 @Injectable()
-export class UsuarioService {
-  private urlEndPoint: string = 'http://localhost:8080/api/usuarios';
+export class EmpleadoService {
+  private urlEndPoint: string = 'http://localhost:8080/api/empleados';
   private _notificarUpload = new EventEmitter<any>();
 
 
@@ -24,44 +24,35 @@ export class UsuarioService {
     }
   
 
-  getUsuarios(page: number): Observable<any> {
+  getEmpleados(page: number): Observable<any> {
     return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
-      catchError(e => {
-        if (e.status == 400) {
-          return throwError(e);
-        }
-        if (e.error.mensaje) {          
-          console.error(e.error.mensaje);
-        }          
-        return throwError(e);
-      }),
       tap((response: any) => {
-        console.log('UsuarioService: tap 1');
-        (response.content as Usuario[]).forEach(usuario => console.log(usuario.empleado.persona.nombre));
+        console.log('EmpleadoService: tap 1');
+        (response.content as Empleado[]).forEach(empleado => console.log(empleado.persona.nombre));
       }),
       map((response: any) => {
-        (response.content as Usuario[]).map(usuario => {
-          usuario.empleado.persona.nombre = usuario.empleado.persona.nombre.toUpperCase();
+        (response.content as Empleado[]).map(empleado => {
+          empleado.persona.nombre = empleado.persona.nombre.toUpperCase();
           
-            if (usuario.empleado.foto) {
-              usuario.empleado.fotoLista = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + usuario.empleado.picByte);              
+            if (empleado.foto) {
+              empleado.fotoLista = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + empleado.picByte);              
             }
           
-          return usuario;
+          return empleado;
         });
         return response;
       }),
       tap(response => {
-        console.log('UsuarioService: tap 2');
-        (response.content as Usuario[]).forEach(usuario => console.log(usuario.empleado.persona.nombre));
+        console.log('EmpleadoService: tap 2');
+        (response.content as Empleado[]).forEach(empleado => console.log(empleado.persona.nombre));
       })
     );
   }
 
-  create(usuario: Usuario): Observable<Usuario> {
-    return this.http.post(this.urlEndPoint, usuario)
+  create(empleado: Empleado): Observable<Empleado> {
+    return this.http.post(this.urlEndPoint, empleado)
       .pipe(
-        map((response: any) => response.usuario as Usuario),
+        map((response: any) => response.empleado as Empleado),
         catchError(e => {
 
           if (e.status == 400) {
@@ -75,8 +66,8 @@ export class UsuarioService {
       );
   }
 
-  getUsuario(id): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.urlEndPoint}/${id}`).pipe(
+  getEmpleado(id): Observable<Empleado> {
+    return this.http.get<Empleado>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {        
         if (e.status != 401 && e.error.mensaje) {
           this.router.navigate(['/paises']);
@@ -88,8 +79,8 @@ export class UsuarioService {
     );
   }
 
-  update(usuario: Usuario): Observable<any> {
-    return this.http.put<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario).pipe(
+  update(empleado: Empleado): Observable<any> {
+    return this.http.put<any>(`${this.urlEndPoint}/${empleado.idEmpleado}`, empleado).pipe(
       catchError(e => {
 
         if (e.status == 400) {
@@ -104,11 +95,11 @@ export class UsuarioService {
     );
   }
 
-  delete(id: number): Observable<Usuario> {
-    return this.http.delete<Usuario>(`${this.urlEndPoint}/${id}`).pipe(
+  delete(id: number): Observable<Empleado> {
+    return this.http.delete<Empleado>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
         if (e.error.mensaje) {
-          this.messageService.add({ severity: 'error', summary: 'Deshabilitar Usuario', detail: e.error.mensaje, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Deshabilitar Empleado', detail: e.error.mensaje, life: 3000 });
           if (e.error.mensaje) {          
             console.error(e.error.mensaje);
           }    

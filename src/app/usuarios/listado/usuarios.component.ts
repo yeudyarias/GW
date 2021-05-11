@@ -11,6 +11,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { AuthService } from '../auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from '../role';
+import * as CryptoJS from 'crypto-js';
 
 
 
@@ -37,10 +38,11 @@ export class UsuariosComponent implements OnInit {
   retrievedImage: any;
   roles: Role[];
   rolesSelected: Role[];
-  oldPassword:boolean;
-  newPassword:boolean;
-  confirmNewPassword:boolean;
-  
+  password: boolean;
+  oldPassword: boolean;
+  newPassword: boolean;
+  confirmNewPassword: boolean;
+
   constructor(private usuarioService: UsuarioService,
     private modalService: ModalService,
     private router: Router,
@@ -56,10 +58,10 @@ export class UsuariosComponent implements OnInit {
     ]);
 
     this.roles = [
-      { id: 2,nombre: 'Administrador', codigo: 'ROLE_ADMIN'},
-      {id:3,nombre: 'Supervisor', codigo: 'ROLE_SUPERVISOR'},
-      {id:1,nombre: 'Usuario', codigo: 'ROLE_USER'}
-  ];
+      { id: 2, nombre: 'Administrador', codigo: 'ROLE_ADMIN' },
+      { id: 3, nombre: 'Supervisor', codigo: 'ROLE_SUPERVISOR' },
+      { id: 1, nombre: 'Usuario', codigo: 'ROLE_USER' }
+    ];
   }
 
   ngOnInit() {
@@ -75,13 +77,13 @@ export class UsuariosComponent implements OnInit {
         .pipe(
           tap(response => {
             console.log('UsuariosComponent: tap 3');
-            (response.content as Usuario[]).forEach(usuario => console.log(usuario.nombre));
+            (response.content as Usuario[]).forEach(usuario => console.log(usuario.empleado.persona.nombre));
           })
         ).subscribe(response => {
           this.usuarios = response.content as Usuario[];
           this.paginador = response;
         });
-    });    
+    });
     this.oldPassword = false;
     this.confirmNewPassword = false;
     this.newPassword = false;
@@ -106,12 +108,12 @@ export class UsuariosComponent implements OnInit {
       .pipe(
         tap(response => {
           console.log('ClientesComponent: tap 3');
-          (response.content as Usuario[]).forEach(usuario => console.log(usuario.nombre));
+          (response.content as Usuario[]).forEach(usuario => console.log(usuario.empleado.persona.nombre));
         })
       ).subscribe(response => {
         this.usuarios = response.content as Usuario[];
         this.paginador = response;
-        this.totalRecords = this.paginador.totalPages * 10;        
+        this.totalRecords = this.paginador.totalPages * 10;
       });
   }
 
@@ -125,7 +127,15 @@ export class UsuariosComponent implements OnInit {
   limpiarMsj() {
     this.msgs = [];
     this.msgs2 = [];
-    this.messageService.clear();
+    this.messageService.clear();    
+    this.limpiarPasswords();
+  }
+
+  limpiarPasswords() {
+    this.newPassword = false;
+    this.confirmNewPassword = false;
+    this.password =false;
+    this.oldPassword = false;
   }
 
 
@@ -133,24 +143,24 @@ export class UsuariosComponent implements OnInit {
     this.limpiarMsj();
     this.usuarioSeleccionado = { ...usuario };
     this.rolesSelected = this.usuarioSeleccionado.roles;
-    if (this.usuarioSeleccionado.foto != null && this.usuarioSeleccionado.foto != undefined) {
-      this.retrievedImage = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.usuarioSeleccionado.picByte);
+    if (this.usuarioSeleccionado.empleado.foto != null && this.usuarioSeleccionado.empleado.foto != undefined) {
+      this.retrievedImage = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.usuarioSeleccionado.empleado.picByte);
     }
     this.usuarioDialog = true;
   }
 
   eliminarUsuario(usuario: Usuario) {
     this.confirmationService.confirm({
-      message: 'Esta seguro que desea deshabilitar el usuario ' + usuario.nombre + '?',
+      message: 'Esta seguro que desea deshabilitar el usuario ' + usuario.empleado.persona.nombre + '?',
       header: 'Confirmar',
       acceptLabel: 'Aceptar',
       rejectLabel: 'Cancelar',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.usuarioService.delete(usuario.id).subscribe(
+        this.usuarioService.delete(usuario.idUsuario).subscribe(
           () => {
             this.usuarios = this.usuarios.filter(cli => cli !== usuario);
-            this.messageService.add({ severity: 'success', summary: 'Usuario Deshabilitado', detail: `Usuario  ${usuario.nombre} deshabilitado`, life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Usuario Deshabilitado', detail: `Usuario  ${usuario.empleado.persona.nombre} deshabilitado`, life: 3000 });
           }
         )
       }
@@ -165,16 +175,23 @@ export class UsuariosComponent implements OnInit {
   salvarUsuario() {
     this.submitted = true;
     this.msgs = [];
+    this.messageService.clear();
     this.usuarioSeleccionado.roles = this.rolesSelected;
-    if (this.usuarioSeleccionado.nombre.trim() && this.usuarioSeleccionado.apellido.trim() && this.usuarioSeleccionado.email.trim()) {
-      if (this.usuarioSeleccionado.id) {
-        this.update();
+    if (this.usuarioSeleccionado.empleado.persona.nombre.trim() && this.usuarioSeleccionado.empleado.persona.apellidos.trim() && this.usuarioSeleccionado.empleado.persona.email.trim()
+      && this.usuarioSeleccionado.username.trim() && this.usuarioSeleccionado.password.trim() &&  this.rolesSelected.length != 0) {
+      if (this.usuarioSeleccionado.idUsuario) {
+        if (this.usuarioSeleccionado.newPassword != this.usuarioSeleccionado.confirmNewPassword) {
+          this.messageService.add({ severity: 'error', summary: 'Contraseñas invalidas ', detail: 'Las contrasenas no coinciden' });
+          return;
+        } else {
+          this.update();
+        }
+
       }
       else {
         this.create();
 
-      }
-      this.usuarioDialog = false;
+      }      
     }
   }
 
@@ -182,9 +199,10 @@ export class UsuariosComponent implements OnInit {
     this.usuarioService.create(this.usuarioSeleccionado)
       .subscribe(
         usuario => {
-          this.messageService.add({ severity: 'success', summary: 'Usuario Guardado', detail: `El usuario ${this.usuarioSeleccionado.nombre} ha sido creado con éxito`, life: 3000 });
+          this.messageService.add({ severity: 'success', summary: 'Usuario Guardado', detail: `El usuario ${this.usuarioSeleccionado.empleado.persona.nombre} ha sido creado con éxito`, life: 3000 });
           this.usuarioSeleccionado = new Usuario();
           this.getUsuarios(0);
+          this.usuarioDialog = false;
         },
         err => {
           this.errores = err.error.errors as string[];
@@ -195,15 +213,16 @@ export class UsuariosComponent implements OnInit {
   }
 
   update(): void {
+    this.msgs = [];
+    this.messageService.clear();
     this.usuarioService.update(this.usuarioSeleccionado)
       .subscribe(
         json => {
-          this.messageService.add({ severity: 'success', summary: 'Usuario Actualizado', detail: `El usuario ${this.usuarioSeleccionado.nombre} ha sido actualizado con éxito`, life: 3000 });
-          this.usuarioSeleccionado = new Usuario();
-          this.getUsuarios(0);
+          this.messageService.add({key:'modal-message',  severity: 'success', summary: 'Usuario Actualizado', detail: `El usuario ${this.usuarioSeleccionado.empleado.persona.nombre} ha sido actualizado con éxito`, life: 3000 });         
+          this.getUsuarios(0);          
         },
-        err => {
-          this.errores = err.error.errors as string[];          
+        err => {          
+          this.messageService.add({ key:'modal-message', severity: 'error', summary: 'Error', detail: err.error.mensaje as string, life: 3000 });          
         }
       )
   }
@@ -211,7 +230,7 @@ export class UsuariosComponent implements OnInit {
   findIndexById(id: number): number {
     let index = -1;
     for (let i = 0; i < this.usuarios.length; i++) {
-      if (this.usuarios[i].id === id) {
+      if (this.usuarios[i].idUsuario === id) {
         index = i
         break;
       }
@@ -234,18 +253,18 @@ export class UsuariosComponent implements OnInit {
 
   subirFoto(event) {
     this.fotoSeleccionada = event.files[0];
-    this.usuarioService.subirFoto(this.fotoSeleccionada, this.usuarioSeleccionado.id)
+    this.usuarioService.subirFoto(this.fotoSeleccionada, this.usuarioSeleccionado.idUsuario)
       .subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.progreso = Math.round((event.loaded / event.total) * 100);
         } else if (event.type === HttpEventType.Response) {
           let response: any = event.body;
           this.usuarioSeleccionado = response.usuario as Usuario;
-         /*  if (this.authService.usuario.username == this.usuarioSeleccionado.username) { 
-            this.authService.guardarUsuarioModificado(this.usuarioSeleccionado);
-          } */          
-          if (this.usuarioSeleccionado.foto != null && this.usuarioSeleccionado.foto != undefined) {
-            this.retrievedImage = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.usuarioSeleccionado.picByte);
+          /*  if (this.authService.usuario.username == this.usuarioSeleccionado.username) { 
+             this.authService.guardarUsuarioModificado(this.usuarioSeleccionado);
+           } */
+          if (this.usuarioSeleccionado.empleado.foto != null && this.usuarioSeleccionado.empleado.foto != undefined) {
+            this.retrievedImage = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.usuarioSeleccionado.empleado.picByte);
           }
           this.getUsuarios(0);
           this.usuarioService.notificarUpload.emit(this.retrievedImage);
@@ -258,19 +277,24 @@ export class UsuariosComponent implements OnInit {
     this.fotoSeleccionada = null;
     this.progreso = 0;
   }
+  showPassword() {
+    this.password = !this.password;
+    console.log("1: " + this.password.valueOf);
+  }
 
   showOldPassword() {
     this.oldPassword = !this.oldPassword;
-    console.log("1: "+this.oldPassword.valueOf);
+    console.log("1: " + this.oldPassword.valueOf);
   }
 
   showNewPassword() {
     this.newPassword = !this.newPassword;
-    console.log("2: "+this.newPassword.valueOf);
+    console.log("2: " + this.newPassword.valueOf);
   }
 
   showNewConfirmPassword() {
     this.confirmNewPassword = !this.confirmNewPassword;
-    console.log("3: "+this.confirmNewPassword.valueOf);
+    console.log("3: " + this.confirmNewPassword.valueOf);
   }
+
 }

@@ -154,6 +154,8 @@ import { UsuarioService } from './usuarios/listado/usuario.service';
 import { UsuariosComponent } from './usuarios/listado/usuarios.component';
 import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
 import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
+import { PagosComponent } from './administracion/pagos/pagos.component';
+import { EmpleadosComponent } from './administracion/empleados/empleados.component';
 
 
 @NgModule({
@@ -295,7 +297,9 @@ import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
         LoginComponent,
         ClientesComponent,
         CRUDClientesComponent,
-        UsuariosComponent
+        UsuariosComponent,
+        EmpleadosComponent,
+        PagosComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

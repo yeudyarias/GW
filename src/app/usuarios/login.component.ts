@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   }
   cerrar(): void {
     this.displayBasic = false;
-    this.usuario.email = "";
+    this.usuario.empleado.persona.email = "";
   }
   login(): void {    
     if (this.usuario.username == null || this.usuario.password == null) {
@@ -79,14 +79,14 @@ export class LoginComponent implements OnInit {
     var msj = "";
     var seve= "";
     var summ= '';
-    if (!this.validateEmail(this.usuarioEmail.email)) {
+    if (!this.validateEmail(this.usuarioEmail.empleado.persona.email)) {
       this.msgs.push({ severity: 'error', summary: 'Correo Invalido', detail: 'Correo electronico invalido'});
     } else {
 
       this.authService.restablecerPassword(this.usuarioEmail).subscribe(
           json => {            
             this.messageService.add({severity:'info', summary: 'Restablecer Contraseña', detail: json.mensaje});            
-            this.usuario.email = "";
+            this.usuario.empleado.persona.email = "";
           },
           err => {
             this.errores = err.error.errors as string[];

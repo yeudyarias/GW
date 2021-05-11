@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario } from './usuario';
 import { Role } from './role';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Empleado } from '../models/empleado';
+import { Persona } from '../models/persona';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AuthService {
 
   private _usuario: Usuario;
+  private _empleado: Empleado;
+  private _persona: Persona;
   private _token: string;
   private urlEndPointUsuarios: string = 'http://localhost:8080/api/usuarios';
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -68,14 +72,20 @@ export class AuthService {
   guardarUsuario(accessToken: string): void {
     let payload = this.obtenerDatosToken(accessToken);
     this._usuario = new Usuario();
-    this._usuario.nombre = payload.nombre;
-    this._usuario.apellido = payload.apellido;
-    this._usuario.email = payload.email;
+    this._empleado = new Empleado();
+    this._persona = new Persona();
+    this._persona.nombre =payload.nombre;
+    this._persona.apellidos =payload.apellido;    
+    this._persona.email =payload.email;    
+    this._empleado.foto = payload.foto;
     this._usuario.username = payload.user_name;
-    this._usuario.foto = payload.foto;
+    this._empleado.persona = this._persona;
+    this._usuario.empleado = this._empleado;
+    
+    
     if (payload.foto) {
-      this._usuario.picByte = payload.picByte;
-      this._usuario.fotoLista = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + payload.picByte);
+      this._usuario.empleado.picByte = payload.picByte;
+      this._usuario.empleado.fotoLista = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + payload.picByte);
     }    
     this._usuario.roles = payload.authorities;
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
@@ -84,13 +94,13 @@ export class AuthService {
   guardarUsuarioModificado(usuario: Usuario): void {
     let payload = this.obtenerDatosToken(this.token);
     this._usuario = new Usuario();
-    this._usuario.nombre = usuario.nombre;
-    this._usuario.apellido = usuario.apellido;
-    this._usuario.email = usuario.email;
+    this._usuario.empleado.persona.nombre = usuario.empleado.persona.nombre;
+    this._usuario.empleado.persona.apellidos = usuario.empleado.persona.apellidos;
+    this._usuario.empleado.persona.email = usuario.empleado.persona.email;
     this._usuario.username = usuario.username;
-    this._usuario.foto = usuario.foto;    
-    this._usuario.picByte = usuario.picByte;
-    this._usuario.fotoLista = usuario.fotoLista;
+    this._usuario.empleado.foto = usuario.empleado.foto;    
+    this._usuario.empleado.picByte = usuario.empleado.picByte;
+    this._usuario.empleado.fotoLista = usuario.empleado.fotoLista;
     this._usuario.roles = payload.authorities;
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
   }

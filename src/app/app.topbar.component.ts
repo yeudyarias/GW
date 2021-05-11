@@ -24,10 +24,10 @@ export class AppTopBarComponent implements OnInit {
     constructor(public appMain: AppMainComponent, private authService: AuthService,
         private usuarioService: UsuarioService,
         private sanitizer: DomSanitizer, private router: Router) {
-        if (this.authService.usuario.foto) {
-            this.fotoPerfil = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.authService.usuario.picByte);            
+        if (this.authService.usuario.empleado.foto) {
+            this.fotoPerfil = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/*;base64, ` + this.authService.usuario.empleado.picByte);            
         } else {
-            this.fotoPerfil2 = "http://localhost:8080/api/uploads/img/" + authService.usuario.foto;
+            this.fotoPerfil2 = "http://localhost:8080/api/uploads/img/" + authService.usuario.empleado.foto;
         }
     }
 

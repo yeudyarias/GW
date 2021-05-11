@@ -1,16 +1,15 @@
+import { Empleado } from "../models/empleado";
 import { Role } from "./role";
 
 export class Usuario {
-  id: number;
+  idUsuario: number;
   username: string;
   password: string;
-  enabled: boolean;
-  nombre: string;
-  apellido: string;
-  email: string;  
-  foto: string;
-  type: string;
-  picByte: string;
-  fotoLista: any;
+  enabled: boolean;    
+  cambioPassword:number;  
+  actualPassword:string;
+  newPassword:string;
+  confirmNewPassword:string;
   roles: Array<Role> = [];
+  empleado:Empleado;
 }

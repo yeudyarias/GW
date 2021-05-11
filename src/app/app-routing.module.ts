@@ -48,6 +48,7 @@ import { MarcaComponent } from './mantenimiento/marca/marca.component';
 import { UsuariosComponent } from './usuarios/listado/usuarios.component';
 import localeES from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { EmpleadosComponent } from './administracion/empleados/empleados.component';
 
 registerLocaleData(localeES, 'es');
 
@@ -92,6 +93,7 @@ registerLocaleData(localeES, 'es');
                     {path: 'documentation', component: DocumentationComponent},
                     { path: 'lista-pacientes', component: ClientesComponent },
                     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
+                    { path: 'empleados', component: EmpleadosComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
                     { path: 'administrar-pacientes', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
                     { path: 'nuevo-paciente', component: CRUDClientesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },                    
                     { path: 'paises', component: PaisComponent , canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_USER' } },
