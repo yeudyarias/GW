@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import { Pais } from 'src/app/models/pais';
 import {AppBreadcrumbService} from '../../app.breadcrumb.service';
 
 @Component({
@@ -6,14 +7,14 @@ import {AppBreadcrumbService} from '../../app.breadcrumb.service';
 })
 export class FormLayoutDemoComponent {
 
-    selectedState: any = null;
+    selectedState: Pais = null;
 
-    states: any[] = [
-        {name: 'Arizona', code: 'Arizona'},
-        {name: 'California', value: 'California'},
-        {name: 'Florida', code: 'Florida'},
-        {name: 'Ohio', code: 'Ohio'},
-        {name: 'Washington', code: 'Washington'}
+    states: Pais[] = [
+        {nombre: 'Arizona', idPais: 1, descripcion:""},
+        {nombre: 'California', idPais: 2, descripcion:""},
+        {nombre: 'Florida', idPais: 3, descripcion:""},
+        {nombre: 'Ohio', idPais: 4, descripcion:""},
+        {nombre: 'Washington', idPais: 5, descripcion:""}
     ];
 
     cities1: any[] = [];
@@ -28,5 +29,7 @@ export class FormLayoutDemoComponent {
         this.breadcrumbService.setItems([
             {label: 'Form Layout'}
         ]);
+
+       this.selectedState =  {nombre: 'Arizona', idPais: 1, descripcion:""};
     }
 }

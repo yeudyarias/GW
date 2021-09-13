@@ -6,8 +6,8 @@ import { Persona } from "./persona";
 
 export class Empleado {
   idEmpleado: number;
-  idCargo: Cargo;
-  idPais: Pais;
+  cargo: Cargo;
+  pais: Pais;
   fechaInicio:Date;
   fechaFin:Date;
   tipoSalario:string;

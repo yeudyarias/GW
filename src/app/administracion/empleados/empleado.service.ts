@@ -11,7 +11,7 @@ import { Empleado } from 'src/app/models/empleado';
 
 @Injectable()
 export class EmpleadoService {
-  private urlEndPoint: string = 'http://localhost:8080/api/empleados';
+  private urlEndPoint: string = 'http://localhost:8080/empleado/empleados';
   private _notificarUpload = new EventEmitter<any>();
 
 

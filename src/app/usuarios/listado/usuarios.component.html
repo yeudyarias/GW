@@ -1,80 +1,3 @@
-<!-- <detalle-usuario *ngIf="usuarioSeleccionado" [usuario] ="usuarioSeleccionado"></detalle-usuario> -->
-
-<div class="card border-primary mb-3">
-  <div class="card-body text-primary">
-    <p-messages [value]="msgs" class="col-6 align-self-center" [closable]="true" [showTransitionOptions]="'10ms'"
-      [hideTransitionOptions]="'0ms'"></p-messages>
-    <h5 class="card-title">Administrar Usuarios</h5>
-    <p-toolbar styleClass="p-mb-4">
-      <ng-template pTemplate="left">
-        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"
-          *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
-      </ng-template>
-
-      <ng-template pTemplate="right">
-        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Importar"
-          class="p-mr-2 p-d-inline-block"></p-fileUpload>
-        <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button>
-      </ng-template>
-    </p-toolbar>
-
-    <div *ngIf="usuarios?.length == 0" class="alert alert-info">
-      No hay registros en la base de datos!
-    </div>
-    <p-table #dt [value]="usuarios" dataKey="id" [showCurrentPageReport]="true" [rows]="10"
-      [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-customers" [rowHover]="true"
-      [paginator]="true" (onLazyLoad)="loadCarsLazyT($event)" [filterDelay]="0"
-      [globalFilterFields]="['id','nombre','apellido']">
-
-      <ng-template pTemplate="caption">
-        <div class="p-d-flex p-ai-center p-jc-between">
-          <h5 class="p-m-0">Listado Usuarios</h5>
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-              placeholder="Buscar..." />
-          </span>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th style="width: 5%;">#</th>
-          <th style="width: 5%;">Id</th>
-          <th style="width: 25%;">Nombre</th>
-          <th style="width: 25%;">Apellidos</th>
-          <th style="width: 25%;">Correo</th>          
-          <th style="width: 15%;" *ngIf="authService.hasRole('ROLE_ADMIN')">Acciones</th>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-          <td>
-            <img [src]="rowData.fotoLista" [alt]="rowData?.foto" class="img imgRedondaPerfil" *ngIf="rowData?.foto"
-              style="width:40px; height: 40px;">
-
-            <img (click)="abrirModal(usuario)" *ngIf="!rowData?.foto" src="http://localhost:8080/images/no-usuario.png"
-              alt="Sin foto" class="imgRedondaLista" style="width:40px; height: 40px; cursor: pointer;">
-          </td>
-          <td>{{rowData.idUsuario}}</td>
-          <td>{{rowData.empleado.persona.nombre}}</td>
-          <td>{{rowData.empleado.persona.apellidos}}</td>
-          <td>{{rowData.empleado.persona.email}}</td>          
-          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
-            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
-              (click)="editarUsuario(rowData)" *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
-            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-              (click)="eliminarUsuario(rowData)" *ngIf="authService.hasRole('ROLE_ADMIN')"></button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-between">
-          Existen en total {{usuarios ? usuarios.length : 0 }} usuarios.
-        </div>
-      </ng-template>
-    </p-table>
-  </div>
   <p-dialog [(visible)]="usuarioDialog" [style]="{width: '650px'}" header="Detalle del Usuario" [modal]="true" (onHide)="limpiarPasswords()"
     styleClass="p-fluid" [maximizable]="true" [baseZIndex]="10000" [draggable]="true" [resizable]="true">
     <p-messages [value]="msgs2" key="modal-message" class="col-6 align-self-center" [closable]="true" [showTransitionOptions]="'10ms'"
@@ -164,44 +87,6 @@
         </p-accordionTab>
       </p-accordion>
 
-
-      <!-- <div class="p-field">
-            <label for="description">Description</label>
-            <textarea id="description" pInputTextarea [(ngModel)]="usuarioSeleccionado.description" required rows="3" cols="20"></textarea>
-        </div>
-
-        <div class="p-field">
-            <label class="p-mb-3">Category</label>
-            <div class="p-formgrid p-grid">
-                <div class="p-field-radiobutton p-col-6">
-                    <p-radioButton id="category1" name="category" value="Accessories" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
-                    <label for="category1">Accessories</label>
-                </div>
-                <div class="p-field-radiobutton p-col-6">
-                    <p-radioButton id="category2" name="category" value="Clothing" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
-                    <label for="category2">Clothing</label>
-                </div>
-                <div class="p-field-radiobutton p-col-6">
-                    <p-radioButton id="category3" name="category" value="Electronics" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
-                    <label for="category3">Electronics</label>
-                </div>
-                <div class="p-field-radiobutton p-col-6">
-                    <p-radioButton id="category4" name="category" value="Fitness" [(ngModel)]="usuarioSeleccionado.category"></p-radioButton>
-                    <label for="category4">Fitness</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-formgrid p-grid">
-            <div class="p-field p-col">
-                <label for="price">Price</label>
-                <p-inputNumber id="price" [(ngModel)]="usuarioSeleccionado.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
-            </div>
-            <div class="p-field p-col">
-                <label for="quantity">Quantity</label>
-                <p-inputNumber id="quantity" [(ngModel)]="usuarioSeleccionado.quantity"></p-inputNumber>
-            </div>
-        </div> -->
     </ng-template>
 
     <ng-template pTemplate="footer">
@@ -210,6 +95,3 @@
         (click)="salvarUsuario()"></button>
     </ng-template>
   </p-dialog>
-
-  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-</div>

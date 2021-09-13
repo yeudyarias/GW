@@ -66,6 +66,10 @@ export class LoginComponent implements OnInit {
         this.msgs = [];
         this.msgs.push({ severity: 'warn', summary: 'Error', detail: 'Usuario o Contraseña incorrectas!' });
       }
+      if (err.status == 401) {
+        this.msgs = [];
+        this.msgs.push({ severity: 'warn', summary: 'Error', detail: `Usuario ${this.usuario.username }, se encuentra deshabilitado!` });
+      }
       if (err.status == 0) {
         this.msgs = [];
         this.msgs.push({ severity: 'error', summary: 'Error ', detail: 'Servidor se encuentra detenido' });

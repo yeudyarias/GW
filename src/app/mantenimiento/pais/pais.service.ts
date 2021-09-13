@@ -35,6 +35,25 @@ export class PaisService {
     return false;
   }
 
+  getAllPaises(): Observable<any> {
+    return this.http.get(this.urlEndPoint,{headers: this.agregarAuthorizationHeader()}).pipe(
+      tap((response: any) => {
+        console.log('PaisService: tap 1');
+        (response as Pais[]).forEach(Pais => console.log(Pais.nombre));
+      }),
+      map((response: any) => {
+        (response as Pais[]).map(Pais => {
+          Pais.nombre = Pais.nombre;
+          return Pais;
+        });
+        return response;
+      }),
+      tap(response => {
+        console.log('PaisService: tap 2');
+        (response as Pais[]).forEach(Pais => console.log(Pais.nombre));
+      }));
+  }
+
   getPaises(page: number): Observable<any> {
     return this.http.get(this.urlEndPoint + '/page/' + page,{headers: this.agregarAuthorizationHeader()}).pipe(
       tap((response: any) => {

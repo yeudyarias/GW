@@ -88,6 +88,20 @@ export class UsuarioService {
     );
   }
 
+
+  getUsuarioByIdEmpleado(idEmpleado): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.urlEndPoint}/byEmpleado/${idEmpleado}`).pipe(
+      catchError(e => {        
+        if (e.status != 401 && e.error.mensaje) {
+          this.router.navigate(['/']);
+          console.error(e.error.mensaje);
+        }
+        
+        return throwError(e);
+      })
+    );
+  }
+
   update(usuario: Usuario): Observable<any> {
     return this.http.put<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario).pipe(
       catchError(e => {

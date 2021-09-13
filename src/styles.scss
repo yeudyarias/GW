@@ -27,3 +27,16 @@
     border-bottom-left-radius: 50% 50%;
   
   }
+
+  .p-datepicker table td > span {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    transition: box-shadow 0.2s;
+    margin: 0px;
+    border: 1px solid transparent;
+}
+
+.p-datepicker table td {
+  padding: 0 !important;
+}

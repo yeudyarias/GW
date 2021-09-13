@@ -3,7 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {DatePipe, HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
 
 import {AccordionModule} from 'primeng/accordion';
@@ -156,6 +156,9 @@ import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
 import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 import { PagosComponent } from './administracion/pagos/pagos.component';
 import { EmpleadosComponent } from './administracion/empleados/empleados.component';
+import { ExcelService } from './services/excel.service';
+import { CargoService } from './mantenimiento/cargo/cargo.service';
+import { EmpleadoService } from './administracion/empleados/empleado.service';
 
 
 @NgModule({
@@ -306,8 +309,8 @@ import { EmpleadosComponent } from './administracion/empleados/empleados.compone
         {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi : true},
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi : true},
         {provide: LOCALE_ID, useValue : 'es'},
-        CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, PaisService, MarcaService, ConfirmationService,MessageService,ClienteService, UsuarioService
+        CountryService, CustomerService, EventService, IconService, NodeService,DatePipe,
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, CargoService, PaisService, MarcaService,EmpleadoService, ConfirmationService,MessageService,ClienteService, UsuarioService,ExcelService
     ],
     bootstrap: [AppComponent]
 })

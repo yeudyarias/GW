@@ -143,7 +143,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Start', icon: 'pi pi-fw pi-download',
+                label: 'Start', icon: 'pi pi-fw pi-download',role: 'ROLE_ADMIN',
                 items: [
                     {
                         label: 'Buy Now', icon: 'pi pi-fw pi-shopping-cart', url: ['https://www.primefaces.org/store']

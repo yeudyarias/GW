@@ -11,7 +11,9 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { AuthService } from '../auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Role } from '../role';
-import * as CryptoJS from 'crypto-js';
+import { Empleado } from 'src/app/models/empleado';
+import { Persona } from 'src/app/models/persona';
+import { ExcelService } from 'src/app/services/excel.service';
 
 
 
@@ -51,7 +53,8 @@ export class UsuariosComponent implements OnInit {
     private messageService: MessageService,
     private breadcrumbService: AppBreadcrumbService,
     private sanitizer: DomSanitizer,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private excelService:ExcelService) {
 
     this.breadcrumbService.setItems([
       { label: 'Administracion / Usuarios', routerLink: ['/usuarios'] }
@@ -120,6 +123,8 @@ export class UsuariosComponent implements OnInit {
   openNew() {
     this.limpiarMsj();
     this.usuarioSeleccionado = new Usuario();
+    this.usuarioSeleccionado.empleado = new Empleado();
+    this.usuarioSeleccionado.empleado.persona = new Persona();
     this.submitted = false;
     this.usuarioDialog = true;
   }
@@ -295,6 +300,10 @@ export class UsuariosComponent implements OnInit {
   showNewConfirmPassword() {
     this.confirmNewPassword = !this.confirmNewPassword;
     console.log("3: " + this.confirmNewPassword.valueOf);
+  }
+
+  exportAsXLSX():void {
+    this.excelService.exportAsExcelFile(this.usuarios, 'usuarios');
   }
 
 }

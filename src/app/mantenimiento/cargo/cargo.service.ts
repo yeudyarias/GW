@@ -1,18 +1,48 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
 import { Router } from '@angular/router';
 import { Cargo } from 'src/app/models/cargo';
+import { AuthService } from 'src/app/usuarios/auth.service';
 
 
 @Injectable()
 export class CargoService {
   private urlEndPoint: string = 'http://localhost:8080/cargo/cargos';  
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
+  
+  private agregarAuthorizationHeader() {
+    let token = this.authService.token;
+    if (token != null) {
+      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
+    }
+
+    return this.httpHeaders;
+  }
+
+  getAllCargos(): Observable<any> {
+    return this.http.get(this.urlEndPoint,{headers: this.agregarAuthorizationHeader()}).pipe(
+      tap((response: any) => {
+        console.log('CargoService: tap 1');
+        (response as Cargo[]).forEach(Pais => console.log(Pais.nombre));
+      }),
+      map((response: any) => {
+        (response as Cargo[]).map(Pais => {
+          Pais.nombre = Pais.nombre;
+          return Pais;
+        });
+        return response;
+      }),
+      tap(response => {
+        console.log('CargoService: tap 2');
+        (response as Cargo[]).forEach(Pais => console.log(Pais.nombre));
+      }));
+  }
 
 
   getCargos(page: number): Observable<any> {

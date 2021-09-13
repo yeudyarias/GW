@@ -1,3 +1,9 @@
 export class Documento {
-    id: number;    
+    idProyecto: number;    
+    nombre: string;
+    descripcion: string;
+    fechaEntrega: Date;
+    fechaVencimiento:Date;
+    diasAlerta:number;
+    documento:string;
   }
